@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <TextView
+        style="@style/size_18_gray006"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:text="备注信息" />
+
+    <EditText
+        android:id="@+id/note_edit"
+        style="@style/size_14_gray006"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/rectangle_shade"
+        android:gravity="top"
+        android:hint="最多可输入100字"
+        android:minLines="5"
+        android:padding="10dp" />
+
+</LinearLayout>

@@ -1,0 +1,34 @@
+package com.ltd.mos.bean;
+
+public class MessageBean {
+
+	String content;
+	String content1;
+	String content2;
+	public String getContent1() {
+		return content1;
+	}
+	public void setContent1(String content1) {
+		this.content1 = content1;
+	}
+	public String getContent2() {
+		return content2;
+	}
+	public void setContent2(String content2) {
+		this.content2 = content2;
+	}
+	String contentDetail;
+	public String getContent() {
+		return content;
+	}
+	public void setContent(String content) {
+		this.content = content;
+	}
+	public String getContentDetail() {
+		return contentDetail;
+	}
+	public void setContentDetail(String contentDetail) {
+		this.contentDetail = contentDetail;
+	}
+	
+}

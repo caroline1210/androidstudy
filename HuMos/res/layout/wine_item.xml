@@ -1,0 +1,101 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="horizontal" >
+
+    <Button
+        android:id="@+id/checkBox"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_gravity="left"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginTop="37dp"
+        android:background="@drawable/shop_check_box"
+        android:button="@null" />
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginTop="10dp" />
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="115dp"
+        android:layout_marginTop="10dp" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
+            <TextView
+                android:id="@+id/desc"
+                style="@style/size_16"
+                android:layout_width="fill_parent"
+                android:layout_height="80dp"
+                android:layout_marginRight="8dp"
+                android:gravity="top|left"
+                android:padding="4dp"
+                android:text="@string/Workmanship" />
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/desc"
+                android:layout_gravity="bottom"
+                android:gravity="center_vertical" >
+
+                <TextView
+                    style="@style/size_16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="22dp"
+                    android:gravity="center"
+                    android:text="数量：" />
+
+                <Button
+                    android:id="@+id/reduce"
+                    style="@style/size_14"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/reduce" />
+
+                <TextView
+                    android:id="@+id/num"
+                    style="@style/size_16"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:gravity="center"
+                    android:text="1" />
+
+                <Button
+                    android:id="@+id/add"
+                    style="@style/size_14"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/add" />
+
+                <TextView
+                    android:id="@+id/price"
+                    style="@style/size_18"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical|right"
+                    android:paddingRight="10dp"
+                    android:text="￥121"
+                    android:textColor="@color/red" />
+            </LinearLayout>
+        </RelativeLayout>
+    </FrameLayout>
+
+</FrameLayout>

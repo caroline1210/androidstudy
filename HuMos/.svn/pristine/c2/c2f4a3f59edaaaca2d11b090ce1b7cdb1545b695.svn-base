@@ -1,0 +1,66 @@
+package com.ltd.mos.http;
+
+import android.content.Context;
+import com.lidroid.xutils.HttpUtils;
+import com.lidroid.xutils.exception.HttpException;
+import com.lidroid.xutils.http.RequestParams;
+import com.lidroid.xutils.http.ResponseInfo;
+import com.lidroid.xutils.http.callback.RequestCallBack;
+import com.lidroid.xutils.http.client.HttpRequest;
+import com.ltd.mos.base.ECallBack;
+import com.ltd.mos.bean.ResultObject;
+
+public class HttpsClientHelper {
+
+	public static void httpsPost(String surl, Context context,
+			RequestParams params, ECallBack callBack) {
+		postHttpsClient(surl, context, params, callBack);
+	}
+
+	/**
+	 * ∑¢ÀÕ«Î«Û
+	 * 
+	 * @param surl
+	 * @param context
+	 * @param saveCookie
+	 * @return
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
+	static ResultObject result = new ResultObject();
+
+	public static void postHttpsClient(String surl, Context context,
+			RequestParams params, final ECallBack callBack) {
+		if (result == null) {
+			result = new ResultObject();
+		}
+		HttpUtils http = new HttpUtils();
+		http.configCurrentHttpCacheExpiry(1000 * 10);
+		http.send(HttpRequest.HttpMethod.GET, surl, params,
+				new RequestCallBack<String>() {
+
+					@Override
+					public void onStart() {
+					}
+
+					@Override
+					public void onLoading(long total, long current,
+							boolean isUploading) {
+					}
+
+					@Override
+					public void onSuccess(ResponseInfo<String> responseInfo) {
+						result.setmCode(responseInfo.statusCode);
+						result.setmMessage(responseInfo.result);
+						callBack.OnCreate(result);
+					}
+
+					@Override
+					public void onFailure(HttpException error, String msg) {
+						callBack.OnError("");						
+					}
+				});
+
+	}
+
+}

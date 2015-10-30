@@ -1,0 +1,287 @@
+package com.ltd.mos.shopcar;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+import com.ltd.mos.R;
+import com.ltd.mos.base.BaseActivity;
+import com.ltd.mos.base.ECallBack;
+import com.ltd.mos.bean.Address;
+import com.ltd.mos.bean.PostBean;
+import com.ltd.mos.bean.Register;
+import com.ltd.mos.bean.ResultObject;
+import com.ltd.mos.db.SaveApplicationParam;
+import com.ltd.mos.http.JsonPrase;
+import com.ltd.mos.task.Task;
+import com.ltd.mos.util.Const;
+import com.ltd.mos.util.Logic;
+
+public class EditAddressActivity extends BaseActivity {
+
+	private String userName, userPhone, userAddress;
+
+	private EditText consig_name, consig_phone, consig_address;
+	private TextView update_geo;
+	private LinearLayout ll_update_geo;
+	private Button consig_sure;
+	Register register;
+
+	private Address address_;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.updateaddress);
+		register = SaveApplicationParam.getRegister(this);
+		address_ = (Address) getIntent().getSerializableExtra("ADDRESS");
+
+		findviewId();
+
+		consig_sure.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+
+				if (Logic.getString(consig_name.getText()).length() == 0
+						|| Logic.getString(consig_phone.getText()).length() == 0
+						|| Logic.getString(consig_address.getText()).length() == 0
+						|| Logic.getString(update_geo.getText()).length() == 0) {
+
+					Toast.makeText(EditAddressActivity.this, "请完善收货地址", 1000)
+							.show();
+					return;
+				}
+
+				if (address_ != null) {// 修改收货地址
+
+					if (Logic.getString(address_.getContactMechId()).length() == 0) {
+						Intent intent = new Intent(EditAddressActivity.this,
+								ConsigActivity.class);
+						Address ads = new Address();
+						ads.setAttnName(Logic.getString(consig_name.getText()));
+						ads.setPhoneNumber(Logic.getString(consig_phone
+								.getText()));
+						ads.setAddress1(Logic.getString(update_geo.getText()));
+						ads.setAddress2(Logic.getString(consig_address
+								.getText()));
+						intent.putExtra("ADS", ads);
+						setResult(600, intent);
+						Toast.makeText(EditAddressActivity.this, "修改成功", 1000)
+								.show();
+						finish();
+						return;
+					} else {
+
+						PostBean post = new PostBean();
+						post.setCode(Const.UPDATESHIPPINGADDRESS);
+						post.setAttnName(Logic.getString(consig_name.getText()));
+						post.setAddress2(Logic.getString(consig_address
+								.getText()));
+						post.setPhoneNumber(Logic.getString(register.getPhone()));
+						post.setStateProvinceGeoId(address == null ? Logic
+								.getString(address_.getStateProvinceGeoId())
+								: Logic.getString(address
+										.getStateProvinceGeoId()));
+						post.setCityGeoId(address == null ? Logic
+								.getString(address_.getCityGeoId()) : Logic
+								.getString(address.getCityGeoId()));
+						post.setCountyGeoId(address == null ? Logic
+								.getString(address_.getCountyGeoId()) : Logic
+								.getString(address.getCountyGeoId()));
+						post.setPhone(Logic.getString(consig_phone.getText()));
+						post.setPassword(Logic.getString(register.getPwd()));
+						post.setContactMechId(address_.getContactMechId());
+
+						new Task(post, EditAddressActivity.this,
+								new ECallBack() {
+
+									public void OnError(Object obj) {
+										Toast.makeText(getApplicationContext(),
+												"请求服务器失败", 1000).show();
+									}
+
+									public void OnCreate(Object obj) {
+										ResultObject result = (ResultObject) obj;
+										String msg = result.getmMessage();
+										JsonPrase prase = new JsonPrase();
+										if (prase.getState(msg)) {
+											Intent intent = new Intent(
+													EditAddressActivity.this,
+													ConsigActivity.class);
+											setResult(500, intent);
+											Toast.makeText(
+													EditAddressActivity.this,
+													"修改成功", 1000).show();
+											finish();
+
+										} else {
+											Toast.makeText(
+													getApplicationContext(),
+													"请求服务器失败", 1000).show();
+										}
+
+									}
+								}).postHttp();
+
+						return;
+					}
+
+				}
+
+				PostBean post = new PostBean();
+				post.setCode(Const.CREATESHIPPINGADDRESS);
+				post.setAttnName(Logic.getString(consig_name.getText()));
+				post.setAddress2(Logic.getString(consig_address.getText()));
+				post.setPhoneNumber(Logic.getString(register.getPhone()));
+				post.setStateProvinceGeoId(Logic.getString(address
+						.getStateProvinceGeoId()));
+				post.setCityGeoId(Logic.getString(address.getCityGeoId()));
+				post.setCountyGeoId(Logic.getString(address.getCityGeoId()));
+				post.setPhone(Logic.getString(consig_phone.getText()));
+				post.setPassword(Logic.getString(register.getPwd()));
+
+				new Task(post, EditAddressActivity.this, new ECallBack() {
+
+					public void OnError(Object obj) {
+						Toast.makeText(getApplicationContext(), "请求服务器失败", 1000)
+								.show();
+					}
+
+					public void OnCreate(Object obj) {
+						ResultObject result = (ResultObject) obj;
+						String msg = result.getmMessage();
+						String contactMechId;
+						JsonPrase prase = new JsonPrase();
+						if (prase.getState(msg)) {
+							contactMechId = prase.getContactMechId(msg);
+
+							Intent intent = new Intent(
+									EditAddressActivity.this,
+									ConsigActivity.class).putExtra(
+									"CONTACTMECHID", contactMechId);
+							setResult(RESULT_OK, intent);
+							Toast.makeText(EditAddressActivity.this, "添加成功",
+									1000).show();
+							finish();
+
+						} else {
+							Toast.makeText(getApplicationContext(), "请求服务器失败",
+									1000).show();
+						}
+
+					}
+				}).postHttp();
+
+			}
+		});
+
+		consig_address.addTextChangedListener(new TextWatcher() {
+
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void afterTextChanged(Editable s) {
+				int lines = consig_address.getLineCount(); // 限制最大输入行数
+				if (lines > 10) {
+					String str = s.toString();
+					int cursorStart = consig_address.getSelectionStart();
+					int cursorEnd = consig_address.getSelectionEnd();
+					if (cursorStart == cursorEnd && cursorStart < str.length()
+							&& cursorStart >= 1) {
+						str = str.substring(0, cursorStart - 1)
+								+ str.substring(cursorStart);
+					} else {
+						str = str.substring(0, s.length() - 1);
+					}
+
+					consig_address.setText(str);
+					consig_address.setSelection(consig_address.getText()
+							.length());
+				}
+			}
+		});
+	}
+
+	private View view;
+	private Address address;
+
+	private void findviewId() {
+
+		view = findViewById(R.id.view);
+		Logic.getInstance().initGrapeTitle(view,
+				address_ == null ? "增加收货地址" : "修改收货地址", true, false,
+				new ECallBack() {
+
+					public void OnError(Object obj) {
+					}
+
+					public void OnCreate(Object obj) {
+						finish();
+					}
+				});
+		consig_name = (EditText) findViewById(R.id.consig_name);
+		consig_phone = (EditText) findViewById(R.id.consig_phone);
+		consig_address = (EditText) findViewById(R.id.consig_address);
+		consig_sure = (Button) findViewById(R.id.consig_sure);
+		update_geo = (TextView) findViewById(R.id.update_geo);
+
+		if (address_ != null) {
+			consig_name.setText(Logic.getString(address_.getAttnName()));
+			consig_phone.setText(Logic.getString(address_.getPhoneNumber()));
+			consig_address.setText(Logic.getString(address_.getAddress2()));
+			update_geo.setText(Logic.getString(address_.getAddress1()));
+		}
+
+		ll_update_geo = (LinearLayout) findViewById(R.id.ll_update_geo);
+		ll_update_geo.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+
+				try {
+					showAreaDialog(new ECallBack() {
+
+						public void OnError(Object obj) {
+						}
+
+						public void OnCreate(Object obj) {
+
+							address = (Address) obj;
+
+							if (address != null) {
+								update_geo.setText(Logic.getString(address
+										.getProvince())
+										+ " "
+										+ Logic.getString(address.getCityName())
+										+ " "
+										+ Logic.getString(address.getCountyName())
+										+ " ");
+							}
+
+						}
+					});
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+		});
+	}
+}

@@ -1,0 +1,148 @@
+package com.ltd.mos.main;
+
+import java.util.ArrayList;
+
+import android.content.Context;
+import android.graphics.Paint;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.ltd.mos.R;
+import com.ltd.mos.bean.WineInfo;
+import com.ltd.mos.image.AsyncImageLoader;
+import com.ltd.mos.util.Logic;
+
+/**
+ * 葡萄酒列表适配器
+ * 
+ * @author xuwu
+ * 
+ */
+public class GrapeListAdapter extends BaseAdapter {
+
+	private ArrayList<WineInfo> wineList;
+
+	private LayoutInflater inflater;
+	Context context;
+
+	public GrapeListAdapter(Context context, ArrayList<WineInfo> wineList) {
+		this.wineList = wineList;
+		this.context = context;
+		inflater = LayoutInflater.from(context);
+		AsyncImageLoader.initOption();
+
+	}
+
+	public int getCount() {
+		// TODO Auto-generated method stub
+		return wineList.size();
+	}
+
+	public Object getItem(int position) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public long getItemId(int position) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public View getView(int position, View convertView, ViewGroup parent) {
+		ViewHolder holder;
+		if (convertView == null) {
+			convertView = inflater.inflate(R.layout.list_grape_item, null);
+			holder = new ViewHolder();
+			findviewid(convertView, holder);
+			convertView.setTag(holder);
+		} else {
+			holder = (ViewHolder) convertView.getTag();
+		}
+
+		initView(holder);
+
+		WineInfo wineInfo = wineList.get(position);
+
+		holder.grape_item_name.setText(Logic.getString(wineInfo.getWineDese()));
+		// holder.grape_item_des.setText(Logic.getString(wineInfo.getWineevent()));
+		holder.grape_item_location.setText(Logic.getString(wineInfo
+				.getLocation()));
+		holder.grape_item_marketprice.setText("市场价:"
+				+ Logic.getString(wineInfo.getMarketPrice()));
+		holder.grape_item_marketprice.getPaint().setFlags(
+				Paint.STRIKE_THRU_TEXT_FLAG | Paint.ANTI_ALIAS_FLAG);
+		holder.grape_item_price
+				.setText(Logic.getString(wineInfo.getWinePrice()));
+
+		String url = Logic.getString(wineInfo.getMediumImageUrl());
+
+		AsyncImageLoader.displayImage(url, holder.grape_item_image);
+
+		if (Logic.getString(wineInfo.getIsPromoProduct()).equals("Y")) {
+			holder.grape_item_drop.setVisibility(View.VISIBLE);
+		} else {
+			holder.grape_item_drop.setVisibility(View.GONE);
+		}
+
+		if (Logic.getString(wineInfo.getHaveCoupon()).equals("Y")) {
+			holder.grape_item_straw.setVisibility(View.VISIBLE);
+		} else {
+			holder.grape_item_straw.setVisibility(View.GONE);
+		}
+
+		if (Logic.getString(wineInfo.getIncludeGift()).equals("Y")) {
+			holder.grape_item_present.setVisibility(View.VISIBLE);
+		} else {
+			holder.grape_item_present.setVisibility(View.GONE);
+		}
+
+		return convertView;
+	}
+
+	private void initView(ViewHolder holder) {
+		holder.grape_item_drop.setVisibility(View.VISIBLE);
+		holder.grape_item_straw.setVisibility(View.VISIBLE);
+		holder.grape_item_present.setVisibility(View.VISIBLE);
+
+	}
+
+	private void findviewid(View convertView, ViewHolder holder) {
+		holder.grape_item_image = (ImageView) convertView
+				.findViewById(R.id.grape_item_image);
+		holder.grape_item_drop = (ImageView) convertView
+				.findViewById(R.id.grape_item_drop);
+		holder.grape_item_straw = (ImageView) convertView
+				.findViewById(R.id.grape_item_straw);
+		holder.grape_item_present = (ImageView) convertView
+				.findViewById(R.id.grape_item_present);
+
+		holder.grape_item_name = (TextView) convertView
+				.findViewById(R.id.grape_item_name);
+		// holder.grape_item_des = (TextView) convertView
+		// .findViewById(R.id.grape_item_des);
+		holder.grape_item_location = (TextView) convertView
+				.findViewById(R.id.grape_item_location);
+		holder.grape_item_marketprice = (TextView) convertView
+				.findViewById(R.id.grape_item_marketprice);
+		holder.grape_item_price = (TextView) convertView
+				.findViewById(R.id.grape_item_price);
+	}
+
+	class ViewHolder {
+		ImageView grape_item_image;
+		ImageView grape_item_drop;
+		ImageView grape_item_straw;
+		ImageView grape_item_present;
+		TextView grape_item_name;
+		// TextView grape_item_des;
+		TextView grape_item_location;
+		TextView grape_item_marketprice;
+		TextView grape_item_price;
+
+	}
+
+}

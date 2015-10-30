@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/person_view"
+        layout="@layout/head_layout" />
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/person_bg" >
+
+                <ImageView
+                    android:id="@+id/iv_person_head"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/person_head"
+                    android:contentDescription="@string/description"
+                    android:visibility="gone" />
+
+                <!-- 未登录时显示该textview，button -->
+
+                <TextView
+                    android:id="@+id/tv_nologin"
+                    style="@style/size_12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/nologin" />
+
+                <Button
+                    android:id="@+id/b_person_login"
+                    style="@style/size_14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_nologin"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/click_login_bg"
+                    android:paddingBottom="10dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:paddingTop="10dp"
+                    android:text="@string/login" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/iv_person_head"
+                    android:layout_centerHorizontal="true" >
+
+                    <TextView
+                        android:id="@+id/tv_person_name"
+                        style="@style/size_14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="10dp"
+                        android:text="@string/person_alter"
+                        android:visibility="gone" />
+
+                    <ImageView
+                        android:id="@+id/iv_person_message"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/message"
+                        android:contentDescription="@string/description"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </RelativeLayout>
+
+            <!-- 第三阶的是代金券和收藏 ,linearlayout嵌套 ,我的代金券和收藏 -->
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:background="#FFFFFF"
+                android:baselineAligned="false"
+                android:orientation="horizontal" >
+
+                <!-- **************左边我的代金券 ******************* -->
+
+                <LinearLayout
+                    android:id="@+id/ll_person_djq"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/rect_corner_middle"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/tv_person_djq_count"
+                        style="@style/person"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="1" />
+
+                    <TextView
+                        style="@style/size_14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="10dp"
+                        android:text="@string/djq" />
+                </LinearLayout>
+
+                <!-- **************** 右边我的收藏**************** -->
+
+                <LinearLayout
+                    android:id="@+id/ll_person_PresentExp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/rect_corner_middle"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:id="@+id/tv_person_collect_count"
+                        style="@style/person"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="1" />
+
+                    <TextView
+                        style="@style/size_14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center_horizontal"
+                        android:text="@string/mypoints" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/shadow_01" />
+
+            <!-- 下半部分，有关货物的信息 -->
+
+            <ListView
+                android:id="@+id/lv_person_order"
+                android:layout_width="fill_parent"
+                android:layout_height="135dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:divider="@null"
+                android:dividerHeight="-2dp"
+                android:listSelector="@android:color/transparent"
+                android:scrollbars="none" >
+            </ListView>
+
+            <ListView
+                android:id="@+id/lv_person_customize"
+                android:layout_width="fill_parent"
+                android:layout_height="90dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:divider="@null"
+                android:dividerHeight="-2dp"
+                android:listSelector="@android:color/transparent"
+                android:scrollbars="none" >
+            </ListView>
+
+            <ListView
+                android:id="@+id/lv_person_xj"
+                android:layout_width="fill_parent"
+                android:layout_height="90dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:divider="@null"
+                android:dividerHeight="-2dp"
+                android:listSelector="@android:color/transparent"
+                android:scrollbars="none" >
+            </ListView>
+            <ListView
+                android:id="@+id/lv_person_friends"
+                android:layout_width="fill_parent"
+                android:layout_height="45dp"
+                android:layout_margin="10dp"
+                android:layout_marginBottom="10dp"
+                android:divider="@null"
+                android:dividerHeight="-2dp"
+                android:listSelector="@android:color/transparent"
+                android:scrollbars="none" >
+            </ListView>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

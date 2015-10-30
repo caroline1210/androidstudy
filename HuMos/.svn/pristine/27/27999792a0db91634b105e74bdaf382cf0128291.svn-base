@@ -1,0 +1,130 @@
+package com.ltd.mos.personal;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.ltd.mos.R;
+import com.ltd.mos.base.BaseActivity;
+import com.ltd.mos.base.ECallBack;
+import com.ltd.mos.bean.PostBean;
+import com.ltd.mos.bean.Register;
+import com.ltd.mos.bean.ResultObject;
+import com.ltd.mos.db.SaveApplicationParam;
+import com.ltd.mos.http.JsonPrase;
+import com.ltd.mos.task.Task;
+import com.ltd.mos.util.Const;
+import com.ltd.mos.util.Logic;
+
+//修改用户名
+public class ChangeUserNameAct extends BaseActivity {
+
+	private View view;
+	private EditText et_username;
+	private Button b_confirm;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.change_username);
+
+		view = findViewById(R.id.username_view);
+		et_username = (EditText) findViewById(R.id.et_username);
+		et_username.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+		Register register = SaveApplicationParam.getRegister(this);
+		et_username.setText(Logic.getString(register.getName()));
+		b_confirm = (Button) findViewById(R.id.b_change_username);
+		b_confirm.setOnClickListener(new OnClickListener() {
+
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				PostBean postBean = getValue();
+				if (postBean == null) {
+					return;
+				}
+				postBean.setCode(Const.CHANGEUSERNAME);
+				Task task = new Task(postBean, ChangeUserNameAct.this,
+						new callBack(postBean));
+				task.postHttp();
+			}
+		});
+
+		Logic logic = Logic.getInstance();
+		logic.initHeadView(view, "修改用户名", true, "", new ECallBack() {
+
+			public void OnError(Object obj) {
+				// TODO Auto-generated method stub
+
+			}
+
+			public void OnCreate(Object obj) {
+				// TODO Auto-generated method stub
+				finish();
+			}
+		});
+	}
+
+	private PostBean getValue() {
+		Register register = SaveApplicationParam.getRegister(this);//
+		String usernameContent = Logic.getString(et_username.getText());
+		if (et_username.length() == 0) {
+			Toast.makeText(ChangeUserNameAct.this,
+					"请输入用户名" + register.getName(), 1000).show();
+			return null;
+		}
+		PostBean postBean = new PostBean();
+		// postBean.setPhoneNumber("15901037642");
+		postBean.setPassword(register.getPwd());
+		postBean.setUserName(usernameContent);
+		postBean.setPhoneNumber(register.getPhone());//
+		return postBean;
+	}
+
+	class callBack implements ECallBack {
+		PostBean postBean;
+
+		public callBack(PostBean postBean) {
+			this.postBean = postBean;
+		}
+
+		public void OnCreate(Object obj) {
+			// TODO Auto-generated method stub
+			ResultObject result = (ResultObject) obj;
+			String str = Logic.getString(result.getmMessage());
+
+			JsonPrase jsonParser = new JsonPrase();
+			if (postBean.getCode() == Const.CHANGEUSERNAME
+					&& jsonParser.getChangeUserName(str) != null) {
+				Toast.makeText(ChangeUserNameAct.this, "修改成功", 1000).show();
+				Register register = SaveApplicationParam
+						.getRegister(ChangeUserNameAct.this);//
+				register.setName(postBean.getUserName());
+				SaveApplicationParam.saveRegister(ChangeUserNameAct.this,
+						register);
+				Intent intent = new Intent(ChangeUserNameAct.this,
+						SettingAct.class);
+				setResult(RESULT_OK, intent);
+				finish();
+			} else {
+				Toast.makeText(ChangeUserNameAct.this, "修改失败", 1000).show();
+			}
+		}
+
+		public void OnError(Object obj) {
+			// TODO Auto-generated method stub
+
+		}
+	}
+
+}

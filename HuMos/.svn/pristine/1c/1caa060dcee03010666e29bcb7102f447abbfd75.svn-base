@@ -1,0 +1,1236 @@
+package com.ltd.mos.http;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+
+import android.util.JsonReader;
+import android.util.JsonToken;
+
+import com.ltd.mos.bean.Address;
+import com.ltd.mos.bean.CategoryFeature;
+import com.ltd.mos.bean.FeaturesBean;
+import com.ltd.mos.bean.FilterBean;
+import com.ltd.mos.bean.GeoInfo;
+import com.ltd.mos.bean.HumosBean;
+import com.ltd.mos.bean.MessageBean;
+import com.ltd.mos.bean.OrderItemList;
+import com.ltd.mos.bean.PersonOrderBean;
+import com.ltd.mos.bean.PostBean;
+import com.ltd.mos.bean.ShippingAddress;
+import com.ltd.mos.bean.ShopCarBean;
+import com.ltd.mos.bean.StatusHistoryList;
+import com.ltd.mos.bean.UserInfoBean;
+import com.ltd.mos.bean.WineInfo;
+import com.ltd.mos.util.Logic;
+
+public class JsonPrase {
+	/**
+	 * 解析请求结果是否成功
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public boolean getState(String str) {
+		str = Logic.getString(str);
+		JsonReader reader = new JsonReader(new StringReader(str));
+		try {
+			reader.beginObject();
+			while (reader.hasNext()) {
+				String tagName = reader.nextName();
+				if (tagName.equalsIgnoreCase("responseMessage")
+						&& reader.peek() != JsonToken.NULL) {
+					String content = reader.nextString();
+					if (Logic.getString(content).equals("success")) {
+						return true;
+					}
+				} else {
+					reader.skipValue();
+				}
+			}
+			reader.endObject();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return false;
+	}
+
+	/**
+	 * 解析contentId 图片标示
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public String getXunjiuCreate(String str) {
+		str = Logic.getString(str);
+		JsonReader reader = new JsonReader(new StringReader(str));
+		try {
+			reader.beginObject();
+			while (reader.hasNext()) {
+				String tagName = reader.nextName();
+				if (tagName.equalsIgnoreCase("responseMessage")
+						&& reader.peek() != JsonToken.NULL) {
+					String content = reader.nextString();
+					if (Logic.getString(content).equals("success")) {
+					}
+				} else if (tagName.equalsIgnoreCase("contentId")
+						&& reader.peek() != JsonToken.NULL) {
+					return reader.nextString();
+				} else {
+					reader.skipValue();
+				}
+			}
+			reader.endObject();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return "";
+	}
+
+	/**
+	 * 解析酒品总数
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public String getProductListSize(String str) {
+		str = Logic.getString(str);
+		JsonReader reader = new JsonReader(new StringReader(str));
+		try {
+			reader.beginObject();
+			while (reader.hasNext()) {
+				String tagName = reader.nextName();
+				if (tagName.equalsIgnoreCase("productListSize")
+						&& reader.peek() != JsonToken.NULL) {
+
+					return reader.nextString();
+				} else {
+					reader.skipValue();
+				}
+			}
+			reader.endObject();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return "";
+	}
+
+	/**
+	 * 获取寻酒列表
+	 * 
+	 * @author xuwu
+	 * @param json
+	 * @return
+	 */
+	public ArrayList<PostBean> getXunjiuList(String json) {
+		ArrayList<PostBean> list = new ArrayList<PostBean>();
+		try {
+			JsonReader reader = new JsonReader(new StringReader(json));
+			reader.beginObject();
+			while (reader.hasNext()) {
+				String tagName = reader.nextName();
+				if (tagName.equals("resultList")
+						&& reader.peek() != JsonToken.NULL) {
+					reader.beginArray();
+					while (reader.hasNext()) {
+						reader.beginObject();
+						PostBean postBean = new PostBean();
+						while (reader.hasNext()) {
+							String tName = reader.nextName();
+							ArrayList<String> strList = new ArrayList<String>();
+							if (tName.equals("story")
+									&& reader.peek() != JsonToken.NULL) {
+								postBean.setXunJiuContent(reader.nextString());
+							} else if (tName.equals("custRequestId")
+									&& reader.peek() != JsonToken.NULL) {
+								postBean.setXunJiuId(reader.nextString());
+							} else if (tName.equals("custRequestName")
+									&& reader.peek() != JsonToken.NULL) {
+
+								postBean.setXunJiuTitle(reader.nextString());
+							} else if (tName.equals("createdDate")
+									&& reader.peek() != JsonToken.NULL) {
+								postBean.setXunJiuCreatDate(reader.nextString());
+
+							} else if (tName.equals("contentId")
+									&& reader.peek() != JsonToken.NULL) {
+
+								strList.add(reader.nextString());
+
+							} else {
+								reader.skipValue();
+							}
+							postBean.setXunJiuImages(strList);
+						}
+
+						list.add(postBean);
+						reader.endObject();
+					}
+					reader.endArray();
+
+				} else {
+					reader.skipValue();
+				}
+			}
+			reader.endObject();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	/**
+	 * 获取酒品分类标识
+	 * 
+	 * @author xuwu
+	 * @param json
+	 * @return
+	 */
+	public ArrayList<CategoryFeature> getCategoryFeatures(String json) {
+		ArrayList<CategoryFeature> categoryFeatureList = new ArrayList<CategoryFeature>();
+
+		try {
+			JsonReader reader = new JsonReader(new StringReader(json));
+			reader.beginObject();
+			while (reader.hasNext()) {
+				String tagName = reader.nextName();
+				if (tagName.equals("categoryFeatureList")
+						&& reader.peek() != JsonToken.NULL) {
+					reader.beginArray();
+					while (reader.hasNext()) {
+						reader.beginObject();
+						CategoryFeature categoryFeature = new CategoryFeature();
+						while (reader.hasNext()) {
+							String tName = reader.nextName();
+							if (tName.equals("productFeatureCategoryId")
+									&& reader.peek() != JsonToken.NULL) {
+								categoryFeature
+										.setProductFeatureCategoryId(reader
+												.nextString());
+							} else if (tName.equals("description")
+									&& reader.peek() != JsonToken.NULL) {
+								categoryFeature.setDescription(reader
+										.nextString());
+							} else if (tName.equals("featureList")
+									&& reader.peek() != JsonToken.NULL) {
+								reader.beginArray();
+								ArrayList<FilterBean> featureList = new ArrayList<FilterBean>();
+								while (reader.hasNext()) {
+									reader.beginObject();
+									FilterBean filterBean = new FilterBean();
+									while (reader.hasNext()) {
+										String name = reader.nextName();
+
+										if (name.equals("productFeatureId")
+												&& reader.peek() != JsonToken.NULL) {
+											filterBean
+													.setProductFeatureId(reader
+															.nextString());
+										} else if (name.equals("description")
+												&& reader.peek() != JsonToken.NULL) {
+											filterBean.setDescription(reader
+													.nextString());
+										} else {
+											reader.skipValue();
+										}
+
+									}
+									featureList.add(filterBean);
+									reader.endObject();
+								}
+								categoryFeature.setFeatureList(featureList);
+								reader.endArray();
+
+							} else {
+								reader.skipValue();
+							}
+
+						}
+						categoryFeatureList.add(categoryFeature);
+						reader.endObject();
+					}
+					reader.endArray();
+
+				} else {
+					reader.skipValue();
+				}
+			}
+
+			reader.endObject();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return categoryFeatureList;
+	}
+
+	/**
+	 * 获取省市区信息
+	 * 
+	 * @author xuwu
+	 * @param json
+	 * @return
+	 */
+	public ArrayList<GeoInfo> getGeoId(String json) {
+		ArrayList<GeoInfo> geoList = new ArrayList<GeoInfo>();
+		try {
+			JsonReader reader = new JsonReader(new StringReader(json));
+			reader.beginObject();
+			while (reader.hasNext()) {
+				String name = reader.nextName();
+
+				if (name.equals("list") && reader.peek() != JsonToken.NULL) {
+					reader.beginArray();
+					while (reader.hasNext()) {
+						reader.beginObject();
+						GeoInfo gInfo = new GeoInfo();
+						while (reader.hasNext()) {
+							String tname = reader.nextName();
+							if (tname.equals("geoId")
+									&& reader.peek() != JsonToken.NULL) {
+								gInfo.setGeoId(reader.nextString());
+							} else if (tname.equals("geoName")
+									&& reader.peek() != JsonToken.NULL) {
+								gInfo.setGeoName(reader.nextString());
+							} else {
+								reader.skipValue();
+							}
+						}
+						geoList.add(gInfo);
+						reader.endObject();
+					}
+
+					reader.endArray();
+
+				} else {
+					reader.skipValue();
+				}
+
+			}
+
+			reader.endObject();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return geoList;
+
+	}
+
+	/**
+	 * 解析contactMechId值
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public String getContactMechId(String json) {
+		json = Logic.getString(json);
+		String contactMechId = "";
+		JsonReader reader = new JsonReader(new StringReader(json));
+		try {
+			reader.beginObject();
+			while (reader.hasNext()) {
+				String tagName = reader.nextName();
+				if (tagName.equalsIgnoreCase("contactMechId")
+						&& reader.peek() != JsonToken.NULL) {
+					contactMechId = reader.nextString();
+				} else {
+					reader.skipValue();
+				}
+			}
+			reader.endObject();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return contactMechId;
+	}
+
+	/**
+	 * 解析购物车标识值
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public String getShoppingListItemSeqId(String json) {
+		json = Logic.getString(json);
+		String shoppingListItemSeqId = "";
+		JsonReader reader = new JsonReader(new StringReader(json));
+		try {
+			reader.beginObject();
+			while (reader.hasNext()) {
+				String tagName = reader.nextName();
+				if (tagName.equalsIgnoreCase("shoppingListItemSeqId")
+						&& reader.peek() != JsonToken.NULL) {
+					shoppingListItemSeqId = reader.nextString();
+				} else {
+					reader.skipValue();
+				}
+			}
+			reader.endObject();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return shoppingListItemSeqId;
+	}
+
+	/**
+	 * 更改用户名
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public UserInfoBean getChangeUserName(String str) {
+		JsonReader reader = new JsonReader(new StringReader(str));
+		UserInfoBean user = new UserInfoBean();
+		try {
+			reader.beginObject();
+			String tagName = reader.nextName();
+			if (tagName.equalsIgnoreCase("responseMessage")
+					&& reader.peek() != JsonToken.NULL) {
+				String content = reader.nextString();
+				if (Logic.getString(content).equals("success")) {
+					return user;
+				}
+			} else if (tagName.equals("userInfo")
+					&& reader.peek() != JsonToken.NULL) {
+
+				String tag = reader.nextString();
+				if (tag.equals("fristName") && reader.peek() != JsonToken.NULL) {
+					user.setFirstName(reader.nextString());
+					if (Logic.getString(tag).equals("系统管理员")) {
+						return user;
+					}
+				}
+			} else {
+				reader.skipValue();
+				reader.endObject();// ?
+			}
+			// reader.endObject();
+		} catch (IOException e) {
+
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return user;
+	}
+
+	/**
+	 * 更改用户密码
+	 * 
+	 * @return
+	 */
+	public PostBean getChangeUserPwd(String str) {
+		JsonReader reader = new JsonReader(new StringReader(str));
+		PostBean postBean = new PostBean();
+		try {
+			reader.beginObject();
+			String tagName = reader.nextName();
+			if (tagName.equalsIgnoreCase("responseMessage")
+					&& reader.peek() != JsonToken.NULL) {
+				String content = reader.nextString();
+				if (Logic.getString(content).equals("success")) {
+					return postBean;
+				}
+			} else {
+				reader.skipValue();
+			}
+			reader.endObject();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return postBean;
+	}
+
+	/**
+	 * 获取用户信息
+	 * 
+	 * @return
+	 */
+	public UserInfoBean getUserInfoBean(String str) {
+		UserInfoBean userInfo = new UserInfoBean();
+		JsonReader reader = new JsonReader(new StringReader(str));
+		try {
+			reader.beginObject();
+			while (reader.hasNext()) {
+				String tagName = reader.nextName();
+				if (tagName.equals("occupation")
+						&& reader.peek() != JsonToken.NULL) {
+					userInfo.setOccupation(reader.nextString());
+				} else if (tagName.equals("partyId")
+						&& reader.peek() != JsonToken.NULL) {
+					userInfo.setPartyId(reader.nextString());
+				} else if (tagName.equals("socialSecurityNumber")
+						&& reader.peek() != JsonToken.NULL) {
+					userInfo.setSocialSecurityNumber(reader.nextString());
+				} else if (tagName.equals("gender")
+						&& reader.peek() != JsonToken.NULL) {
+					userInfo.setGender(reader.nextString());
+				} else if (tagName.equals("birthDate")
+						&& reader.peek() != JsonToken.NULL) {
+					userInfo.setBirthDate(reader.nextString());
+				} else if (tagName.equals("maritalStatus")
+						&& reader.peek() != JsonToken.NULL) {
+					userInfo.setMaritalStatus(reader.nextString());
+				} else if (tagName.equals("firstName")
+						&& reader.peek() != JsonToken.NULL) {
+					userInfo.setFirstName(reader.nextString());
+				} else if (tagName.equals("comments")
+						&& reader.peek() != JsonToken.NULL) {
+					userInfo.setComments(reader.nextString());
+				} else {
+					reader.skipValue();
+				}
+				reader.endObject();
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return userInfo;
+	}
+
+	/**
+	 * 获取消息提醒
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public MessageBean getMessage(String str) {
+		MessageBean message = new MessageBean();
+		JsonReader reader = new JsonReader(new StringReader(str));
+		try {
+			reader.beginObject();
+			while (reader.hasNext()) {
+				String tagName = reader.nextName();
+				if (tagName.equals("systemNoticeList")
+						&& reader.peek() != JsonToken.NULL) {
+					reader.beginArray();
+					while (reader.hasNext()) {
+						reader.beginObject();
+						while (reader.hasNext()) {
+							String tName = reader.nextName();
+							if (tName.equals("noteName")
+									&& reader.peek() != JsonToken.NULL) {
+								message.setmTitle(reader.nextString());
+							} else if (tName.equals("noteInfo")
+									&& reader.peek() != JsonToken.NULL) {
+								message.setmContent(reader.nextString());
+							} else if (tName.equals("noteDateTime")
+									&& reader.peek() != JsonToken.NULL) {
+								message.setmTime(reader.nextString());
+							} else {
+								reader.skipValue();
+							}
+						}
+						reader.endObject();
+					}
+					reader.endArray();
+				}else{
+					reader.skipValue();
+				}
+			}
+			reader.endObject();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return message;
+	}
+
+	/**
+	 * 获取消息提醒
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public MessageBean getsendMessage(String str) {
+		MessageBean message = new MessageBean();
+		JsonReader reader = new JsonReader(new StringReader(str));
+		try {
+			reader.beginObject();
+			while (reader.hasNext()) {
+				String tagName = reader.nextName();
+				if (tagName.equals("userNoteList")
+						&& reader.peek() != JsonToken.NULL) {
+					reader.beginArray();
+					while (reader.hasNext()) {
+						reader.beginObject();
+						while (reader.hasNext()) {
+							String tName = reader.nextName();
+							if (tName.equals("noteName")
+									&& reader.peek() != JsonToken.NULL) {
+								message.setmTitle(reader.nextString());
+							} else if (tName.equals("noteInfo")
+									&& reader.peek() != JsonToken.NULL) {
+								message.setmContent(reader.nextString());
+							} else if (tName.equals("noteDateTime")
+									&& reader.peek() != JsonToken.NULL) {
+								message.setmTime(reader.nextString());
+							} else if (tName.equals("noteId")
+									&& reader.peek() != JsonToken.NULL) {
+								message.setmId(reader.nextString());
+							} else {
+								reader.skipValue();
+							}
+						}
+						reader.endObject();
+					}
+					reader.endArray();
+				}else{
+					reader.skipValue();
+				}
+			}
+			reader.endObject();
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return message;
+	}
+
+	/**
+	 * 获取个人订单列表信息
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public ArrayList<PersonOrderBean> getOrderState(String str) {
+		ArrayList<PersonOrderBean> list = new ArrayList<PersonOrderBean>();
+		try {
+			JsonReader reader = new JsonReader(new StringReader(str));
+			reader.beginObject();
+			while (reader.hasNext()) {
+				String tagName = reader.nextName();
+				if (tagName.equals("orderList")
+						&& reader.peek() != JsonToken.NULL) {
+					reader.beginArray();
+					while (reader.hasNext()) {
+						reader.beginObject();
+						PersonOrderBean personOrder = new PersonOrderBean();
+						while (reader.hasNext()) {
+							String tName = reader.nextName();
+							if (tName.equals("orderId")
+									&& reader.peek() != JsonToken.NULL) {
+								personOrder.setOrderId(reader.nextString());
+							} else if (tName.equals("statusId")
+									&& reader.peek() != JsonToken.NULL) {
+								personOrder.setStatusId(reader.nextString());
+							} else if (tName.equals("statusDescription")
+									&& reader.peek() != JsonToken.NULL) {
+								personOrder.setStatusDescription(reader
+										.nextString());
+							} else if (tName.equals("orderDate")
+									&& reader.peek() != JsonToken.NULL) {
+								personOrder.setOrderDate(reader.nextString());
+							} else if (tName.equals("shipDate")
+									&& reader.peek() != JsonToken.NULL) {
+								personOrder.setShipDate(reader.nextString());
+							} else if (tName.equals("grandTotal")
+									&& reader.peek() != JsonToken.NULL) {
+								personOrder.setGrandTotal(reader.nextString());
+							} else if (tName.equals("orderItemList")
+									&& reader.peek() != JsonToken.NULL) {
+								reader.beginArray();
+								ArrayList<OrderItemList> orderItemList = new ArrayList<OrderItemList>();
+								while (reader.hasNext()) {
+									reader.beginObject();
+									OrderItemList status = new OrderItemList();
+									while (reader.hasNext()) {
+										String TName = reader.nextName();
+										if (TName.equals("orderItemSeqId")
+												&& reader.peek() != JsonToken.NULL) {
+											status.setOrderItemSeqId(reader
+													.nextString());
+										} else if (TName.equals("productId")
+												&& reader.peek() != JsonToken.NULL) {
+											status.setProductId(reader
+													.nextString());
+										} else if (TName.equals("internalName")
+												&& reader.peek() != JsonToken.NULL) {
+											status.setInternalName(reader
+													.nextString());
+										} else if (TName.equals("quantity")
+												&& reader.peek() != JsonToken.NULL) {
+											status.setQuantity(reader
+													.nextString());
+										} else if (TName.equals("itemTotal")
+												&& reader.peek() != JsonToken.NULL) {
+											status.setItemTotal(reader
+													.nextString());
+										} else if (TName
+												.equals("smallImageUrl")
+												&& reader.peek() != JsonToken.NULL) {
+											status.setSmallImageUrl(HttpUtil.httpHead_image
+													+ reader.nextString());
+										} else if (TName
+												.equals("mediumImageUrl")
+												&& reader.peek() != JsonToken.NULL) {
+											status.setMediumImageUrl(HttpUtil.httpHead_image
+													+ reader.nextString());
+										} else if (TName
+												.equals("largeImageUrl")
+												&& reader.peek() != JsonToken.NULL) {
+											status.setLargeImageUrl(HttpUtil.httpHead_image
+													+ reader.nextString());
+										} else if (TName
+												.equals("detailImageUrl")
+												&& reader.peek() != JsonToken.NULL) {
+											status.setDetailImageUrl(HttpUtil.httpHead_image
+													+ reader.nextString());
+										} else {
+											reader.skipValue();
+										}
+
+									}
+									orderItemList.add(status);
+									reader.endObject();
+								}
+
+								personOrder.setOrderItemList(orderItemList);
+								reader.endArray();
+
+							} else if (tName.equals("statusHistoryList")
+									&& reader.peek() != JsonToken.NULL) {
+								reader.beginArray();
+								ArrayList<StatusHistoryList> statusHistoryList = new ArrayList<StatusHistoryList>();
+								while (reader.hasNext()) {
+									reader.beginObject();
+									StatusHistoryList status = new StatusHistoryList();
+									while (reader.hasNext()) {
+										String TName = reader.nextName();
+										if (TName.equals("statusId")
+												&& reader.peek() != JsonToken.NULL) {
+											status.setStatusId(reader
+													.nextString());
+										} else if (TName
+												.equals("statusDescription")
+												&& reader.peek() != JsonToken.NULL) {
+											status.setStatusDescription(reader
+													.nextString());
+										} else if (TName
+												.equals("statusDatetime")
+												&& reader.peek() != JsonToken.NULL) {
+											status.setStatusDatetime(reader
+													.nextString());
+										} else {
+											reader.skipValue();
+										}
+									}
+									statusHistoryList.add(status);
+									reader.endObject();
+								}
+								personOrder
+										.setStatusHistoryList(statusHistoryList);
+								reader.endArray();
+							} else if (tName.equals("shippingAddress")
+									&& reader.peek() != JsonToken.NULL) {
+								// info.setLargeImageUrl(HttpUtil.httpHead_image
+								// + reader.nextString());
+								reader.beginObject();
+								ArrayList<ShippingAddress> shippingAddress = new ArrayList<ShippingAddress>();
+								while (reader.hasNext()) {
+									ShippingAddress status = new ShippingAddress();
+									while (reader.hasNext()) {
+										String TName = reader.nextName();
+										if (TName.equals("cityGeoId")
+												&& reader.peek() != JsonToken.NULL) {
+											status.setCityGeoId(reader
+													.nextString());
+										} else if (TName.equals("phoneNumber")
+												&& reader.peek() != JsonToken.NULL) {
+											status.setPhoneNumber(reader
+													.nextString());
+										} else if (TName.equals("countyGeoId")
+												&& reader.peek() != JsonToken.NULL) {
+											status.setCountyGeoId(reader
+													.nextString());
+										} else if (TName.equals("attnName")
+												&& reader.peek() != JsonToken.NULL) {
+											status.setAttnName(reader
+													.nextString());
+										} else if (TName
+												.equals("contactMechId")
+												&& reader.peek() != JsonToken.NULL) {
+											status.setContactMechId(reader
+													.nextString());
+										} else if (TName
+												.equals("stateProvinceGeoId")
+												&& reader.peek() != JsonToken.NULL) {
+											status.setStateProvinceGeoId(reader
+													.nextString());
+										} else if (TName.equals("address1")
+												&& reader.peek() != JsonToken.NULL) {
+											status.setAddress1(reader
+													.nextString());
+										} else if (TName.equals("address2")
+												&& reader.peek() != JsonToken.NULL) {
+											status.setAddress2(reader
+													.nextString());
+										} else {
+											reader.skipValue();
+										}
+
+									}
+									shippingAddress.add(status);
+
+								}
+								personOrder.setShippingAddress(shippingAddress);
+								reader.endObject();
+							} else {
+								reader.skipValue();
+							}
+						}
+						reader.endObject();
+						list.add(personOrder);
+					}
+					reader.endArray();
+				} else {
+					reader.skipValue();
+				}
+			}
+			reader.endObject();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return list;
+	}
+
+	// public
+
+	/**
+	 * 获取注册信息
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public HumosBean getVerify(String str) {
+		HumosBean humosBean = new HumosBean();
+		JsonReader reader = new JsonReader(new StringReader(str));
+		try {
+			reader.beginObject();
+			while (reader.hasNext()) {
+				String tagName = reader.nextName();
+				if (tagName.equalsIgnoreCase("captchaCode")
+						&& reader.peek() != JsonToken.NULL) {
+					humosBean.setVerify(reader.nextString());
+				} else if (tagName.equalsIgnoreCase("responseMessage")
+						&& reader.peek() != JsonToken.NULL) {
+					humosBean.setMessage(reader.nextString());
+				} else {
+					reader.skipValue();
+				}
+			}
+			reader.endObject();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return humosBean;
+	}
+
+	/**
+	 * 扫码订单收货
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public WineInfo ContrastCode(String str) {
+		WineInfo info = new WineInfo();
+		JsonReader reader = new JsonReader(new StringReader(str));
+		try {
+			reader.beginObject();
+			String tagName = reader.nextName();
+			if (tagName.equalsIgnoreCase("responseMessage")
+					&& reader.peek() != JsonToken.NULL) {
+				String content = reader.nextString();
+				if (Logic.getString(content).equals("success")) {
+					return info;
+				}
+			} else {
+				reader.skipValue();
+			}
+			reader.endObject();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return info;
+	}
+
+	/**
+	 * 查询检索酒品全部信息
+	 * 
+	 * @param postBean
+	 * @return
+	 */
+
+	public ArrayList<WineInfo> findProduct(String str) {
+		System.out.println(str);
+		File dir = Logic.getImagePath("ceshi.txt");
+		if (!dir.exists()) {
+			try {
+				dir.createNewFile();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		FileWriter fileWritter;
+		try {
+			fileWritter = new FileWriter(dir.getAbsolutePath(), true);
+			BufferedWriter bufferWritter = new BufferedWriter(fileWritter);
+			bufferWritter.write(str);
+			bufferWritter.close();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		ArrayList<WineInfo> list = new ArrayList<WineInfo>();
+		try {
+			JsonReader reader = new JsonReader(new StringReader(str));
+			reader.beginObject();
+			while (reader.hasNext()) {
+				String tagName = reader.nextName();
+				if (tagName.equals("productList")
+						&& reader.peek() != JsonToken.NULL) {
+					reader.beginArray();
+					while (reader.hasNext()) {
+						reader.beginObject();
+						WineInfo info = new WineInfo();
+						while (reader.hasNext()) {
+							String tName = reader.nextName();
+							if (tName.equals("internalName")
+									&& reader.peek() != JsonToken.NULL) {
+								info.setWineDese(reader.nextString());
+							} else if (tName.equals("isPromoProduct")
+									&& reader.peek() != JsonToken.NULL) {
+								info.setIsPromoProduct(reader.nextString());
+							} else if (tName.equals("smallImageUrl")
+									&& reader.peek() != JsonToken.NULL) {
+								info.setSmallImageUrl(HttpUtil.httpHead_image
+										+ reader.nextString());
+							} else if (tName.equals("barcode")
+									&& reader.peek() != JsonToken.NULL) {
+								info.setBarcode(reader.nextString());
+							} else if (tName.equals("haveCoupon")
+									&& reader.peek() != JsonToken.NULL) {
+								info.setHaveCoupon(reader.nextString());
+							} else if (tName.equals("includeGift")
+									&& reader.peek() != JsonToken.NULL) {
+								info.setIncludeGift(reader.nextString());
+							} else if (tName.equals("productId")
+									&& reader.peek() != JsonToken.NULL) {
+								info.setWineId(reader.nextString());
+							} else if (tName.equals("originalImageUrl")
+									&& reader.peek() != JsonToken.NULL) {
+								info.setOriginalImageUrl(reader.nextString());
+							} else if (tName.equals("categoryName")
+									&& reader.peek() != JsonToken.NULL) {
+								info.setCategoryName(reader.nextString());
+							} else if (tName.equals("listPrice")
+									&& reader.peek() != JsonToken.NULL) {
+								info.setMarketPrice(reader.nextString());
+							} else if (tName.equals("description")
+									&& reader.peek() != JsonToken.NULL) {
+								info.setWineevent(reader.nextString());
+							} else if (tName.equals("features")
+									&& reader.peek() != JsonToken.NULL) {
+								reader.beginArray();
+								ArrayList<FeaturesBean> featureList = new ArrayList<FeaturesBean>();
+								while (reader.hasNext()) {
+									reader.beginObject();
+									FeaturesBean feature = new FeaturesBean();
+									while (reader.hasNext()) {
+										String TName = reader.nextName();
+										if (TName
+												.equals("productFeatureCategoryId")
+												&& reader.peek() != JsonToken.NULL) {
+											feature.setProductFeatureCategoryId(reader
+													.nextString());
+
+										} else if (TName
+												.equals("productFeatureCategoryDescription")
+												&& reader.peek() != JsonToken.NULL) {
+											feature.setProductFeatureCategoryDescription(reader
+													.nextString());
+										} else if (TName
+												.equals("productFeatureId")
+												&& reader.peek() != JsonToken.NULL) {
+											feature.setProductFeatureId(reader
+													.nextString());
+										} else if (TName
+												.equals("productFeatureDescription")
+												&& reader.peek() != JsonToken.NULL) {
+											feature.setProductFeatureDescription(reader
+													.nextString());
+										} else {
+											reader.skipValue();
+										}
+
+									}
+									featureList.add(feature);
+									reader.endObject();
+								}
+
+								info.setFeaturesList(featureList);
+								reader.endArray();
+
+							} else if (tName.equals("longDescription")
+									&& reader.peek() != JsonToken.NULL) {
+								info.setWineLoneDese(reader.nextString());
+							} else if (tName.equals("largeImageUrl")
+									&& reader.peek() != JsonToken.NULL) {
+								info.setLargeImageUrl(HttpUtil.httpHead_image
+										+ reader.nextString());
+							} else if (tName.equals("mediumImageUrl")
+									&& reader.peek() != JsonToken.NULL) {
+								info.setMediumImageUrl(HttpUtil.httpHead_image
+										+ reader.nextString());
+							} else if (tName.equals("defaultPrice")
+									&& reader.peek() != JsonToken.NULL) {
+								info.setWinePrice(reader.nextString());
+							} else if (tName.equals("detailImageUrl")
+									&& reader.peek() != JsonToken.NULL) {
+								info.setDetailImageUrl(HttpUtil.httpHead_image
+										+ reader.nextString());
+							} else if (tName.equals("primaryProductCategoryId")
+									&& reader.peek() != JsonToken.NULL) {
+								info.setPrimaryProductCategoryId(reader
+										.nextString());
+							} else {
+								reader.skipValue();
+							}
+
+						}
+						reader.endObject();
+						list.add(info);
+					}
+					reader.endArray();
+				} else {
+					reader.skipValue();
+				}
+
+			}
+
+			reader.endObject();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return list;
+	}
+
+	/**
+	 * 获取购物车列表
+	 * 
+	 * @author xuwu
+	 * @param str
+	 * @return
+	 */
+	public ArrayList<ShopCarBean> getShoppingList(String str) {
+		ArrayList<ShopCarBean> shoppingList = new ArrayList<ShopCarBean>();
+		try {
+			JsonReader reader = new JsonReader(new StringReader(str));
+			reader.beginObject();
+			while (reader.hasNext()) {
+				String tagName = reader.nextName();
+				if (tagName.equals("shoppingListItems")
+						&& reader.peek() != JsonToken.NULL) {
+					reader.beginArray();
+					while (reader.hasNext()) {
+						reader.beginObject();
+						ShopCarBean shopCar = new ShopCarBean();
+						while (reader.hasNext()) {
+							String Tname = reader.nextName();
+							if (Tname.equals("shoppingListItemSeqId")
+									&& reader.peek() != JsonToken.NULL) {
+								shopCar.setShoppingListItemSeqId(reader
+										.nextString());
+							} else if (Tname.equals("internalName")
+									&& reader.peek() != JsonToken.NULL) {
+								shopCar.setInternalName(reader.nextString());
+							} else if (Tname.equals("largeImageUrl")
+									&& reader.peek() != JsonToken.NULL) {
+								shopCar.setLargeImageUrl(HttpUtil.httpHead_image
+										+ reader.nextString());
+							} else if (Tname.equals("smallImageUrl")
+									&& reader.peek() != JsonToken.NULL) {
+								shopCar.setSmallImageUrl(HttpUtil.httpHead_image
+										+ reader.nextString());
+							} else if (Tname.equals("unitPrice")
+									&& reader.peek() != JsonToken.NULL) {
+								shopCar.setUnitPrice(reader.nextString());
+							} else if (Tname.equals("quantity")
+									&& reader.peek() != JsonToken.NULL) {
+								shopCar.setQuantity(reader.nextString());
+							} else if (Tname.equals("mediumImageUrl")
+									&& reader.peek() != JsonToken.NULL) {
+								shopCar.setMediumImageUrl(HttpUtil.httpHead_image
+										+ reader.nextString());
+							} else if (Tname.equals("detailImageUrl")
+									&& reader.peek() != JsonToken.NULL) {
+								shopCar.setDetailImageUrl(HttpUtil.httpHead_image
+										+ reader.nextString());
+							} else if (Tname.equals("totalPrice")
+									&& reader.peek() != JsonToken.NULL) {
+								shopCar.setTotalPrice(reader.nextString());
+							} else if (Tname.equals("productId")
+									&& reader.peek() != JsonToken.NULL) {
+								shopCar.setProductId(reader.nextString());
+							} else if (Tname.equals("shippingListAddress")
+									&& reader.peek() != JsonToken.NULL) {
+								shopCar.setShippingListAddress(reader
+										.nextString());
+							} else if (Tname.equals("shippingListTotalPrice")
+									&& reader.peek() != JsonToken.NULL) {
+								shopCar.setShippingListTotalPrice(reader
+										.nextString());
+							} else {
+								reader.skipValue();
+							}
+						}
+						shoppingList.add(shopCar);
+						reader.endObject();
+					}
+
+					reader.endArray();
+				} else if (tagName.equals("shippingListAddress")
+						&& reader.peek() != JsonToken.NULL) {
+					reader.beginObject();
+					Address address = new Address();
+					while (reader.hasNext()) {
+						String tName = reader.nextName();
+
+						if (tName.equals("cityGeoId")
+								&& reader.peek() != JsonToken.NULL) {
+							address.setCityGeoId(reader.nextString());
+						} else if (tName.equals("phoneNumber")
+								&& reader.peek() != JsonToken.NULL) {
+							address.setPhoneNumber(reader.nextString());
+						} else if (tName.equals("countyGeoId")
+								&& reader.peek() != JsonToken.NULL) {
+							address.setCountyGeoId(reader.nextString());
+						} else if (tName.equals("attnName")
+								&& reader.peek() != JsonToken.NULL) {
+							address.setAttnName(reader.nextString());
+						} else if (tName.equals("contactMechId")
+								&& reader.peek() != JsonToken.NULL) {
+							address.setContactMechId(reader.nextString());
+						} else if (tName.equals("stateProvinceGeoId")
+								&& reader.peek() != JsonToken.NULL) {
+							address.setStateProvinceGeoId(reader.nextString());
+						} else if (tName.equals("address1")
+								&& reader.peek() != JsonToken.NULL) {
+							address.setAddress1(reader.nextString());
+						} else if (tName.equals("address2")
+								&& reader.peek() != JsonToken.NULL) {
+							address.setAddress2(reader.nextString());
+						} else {
+							reader.skipValue();
+						}
+					}
+
+					if (shoppingList != null && shoppingList.size() > 0)
+						for (int i = 0; i < shoppingList.size(); i++) {
+							shoppingList.get(i).setAddress(address);
+						}
+					reader.endObject();
+				} else {
+					reader.skipValue();
+				}
+
+			}
+			reader.endObject();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return shoppingList;
+	}
+
+	/**
+	 * 获取收货地址列表
+	 * 
+	 * @author xuwu
+	 * @param json
+	 * @return
+	 */
+	public ArrayList<Address> listShippingAddress(String json) {
+		ArrayList<Address> addressList = new ArrayList<Address>();
+		try {
+			JsonReader reader = new JsonReader(new StringReader(json));
+			reader.beginObject();
+			while (reader.hasNext()) {
+				String tagName = reader.nextName();
+				if (tagName.equals("shippingAddressList")
+						&& reader.peek() != JsonToken.NULL) {
+					reader.beginArray();
+					while (reader.hasNext()) {
+						reader.beginObject();
+						Address address = new Address();
+						while (reader.hasNext()) {
+							String Tname = reader.nextName();
+							if (Tname.equals("contactMechId")
+									&& reader.peek() != JsonToken.NULL) {
+								address.setContactMechId(reader.nextString());
+							} else if (Tname.equals("attnName")
+									&& reader.peek() != JsonToken.NULL) {
+								address.setAttnName(reader.nextString());
+							} else if (Tname.equals("stateProvinceGeoId")
+									&& reader.peek() != JsonToken.NULL) {
+								address.setStateProvinceGeoId(reader
+										.nextString());
+							} else if (Tname.equals("cityGeoId")
+									&& reader.peek() != JsonToken.NULL) {
+								address.setCityGeoId(reader.nextString());
+							} else if (Tname.equals("countyGeoId")
+									&& reader.peek() != JsonToken.NULL) {
+								address.setCountyGeoId(reader.nextString());
+							} else if (Tname.equals("address1")
+									&& reader.peek() != JsonToken.NULL) {
+								address.setAddress1(reader.nextString());
+							} else if (Tname.equals("address2")
+									&& reader.peek() != JsonToken.NULL) {
+								address.setAddress2(reader.nextString());
+							} else if (Tname.equals("phoneNumber")
+									&& reader.peek() != JsonToken.NULL) {
+								address.setPhoneNumber(reader.nextString());
+							} else {
+								reader.skipValue();
+							}
+
+						}
+						addressList.add(address);
+						reader.endObject();
+					}
+
+					reader.endArray();
+
+				} else {
+					reader.skipValue();
+				}
+
+			}
+			reader.endObject();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return addressList;
+
+	}
+}

@@ -1,0 +1,85 @@
+package com.ltd.mos.personal;
+
+import java.util.ArrayList;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.TextView;
+import com.ltd.mos.R;
+import com.ltd.mos.base.BaseActivity;
+import com.ltd.mos.base.ECallBack;
+import com.ltd.mos.bean.TailorBean;
+import com.ltd.mos.util.Const;
+import com.ltd.mos.util.Logic;
+
+//定制详情
+public class CustomizeAct extends BaseActivity {
+
+	private View view;
+	private TextView tv_clear;
+	private ListView listView;
+	private CustomizeAdapter adapter;
+	private ArrayList<TailorBean> list;
+	private String[] wineinfo={ "使用场合：", "单价要求：", "数量/瓶：", "使用时间：","添加附件：","详细描述："};
+	private String[] winehint={"婚宴","300","50","2014-08-11","","请准时，如有变动请随时联系"};
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.customize);
+
+		list = new ArrayList<TailorBean>();
+
+		list=getList(null, winehint, wineinfo);
+		adapter = new CustomizeAdapter(this, list);
+		listView = (ListView) findViewById(R.id.lv_customize);
+		listView.setAdapter(adapter);
+
+		view = findViewById(R.id.customize_view);
+
+		tv_clear = (TextView) findViewById(R.id.empty);
+		tv_clear.setText("修改");
+
+		Logic logic = Logic.getInstance();
+		logic.showSet(view, false, true, new CallBack());
+		logic.initHeadView(view, "定制详情", true, "", new CallBack());
+	}
+
+	class CallBack implements ECallBack {
+
+		public void OnCreate(Object obj) {
+			// TODO Auto-generated method stub
+			if (obj.equals(Const.LEFT)) {
+				// 返回上一级界面
+				finish();
+			} else {
+				// 清空
+			}
+		}
+
+		public void OnError(Object obj) {
+			// TODO Auto-generated method stub
+
+		}
+	}
+
+	private ArrayList<TailorBean> getList(String[] content, String[] hint,
+			String[] title) {
+		ArrayList<TailorBean> list = new ArrayList<TailorBean>();
+		for (int i = 0; i < title.length; i++) {
+			TailorBean tailorBean = new TailorBean();
+			tailorBean.setTitle(title[i]);
+			if (hint != null) {
+				tailorBean.setContentHint(hint[i]);
+			}
+			if (content != null) {
+				tailorBean.setContent(content[i]);
+			}
+			list.add(tailorBean);
+		}
+		return list;
+
+	}
+}

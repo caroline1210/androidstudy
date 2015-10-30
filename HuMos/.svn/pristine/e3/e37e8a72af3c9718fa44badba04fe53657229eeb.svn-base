@@ -1,0 +1,119 @@
+package com.ltd.mos.sercenter;
+
+import java.util.ArrayList;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
+
+import com.ltd.mos.R;
+import com.ltd.mos.base.BaseActivity;
+import com.ltd.mos.base.ECallBack;
+import com.ltd.mos.bean.SearchWineBean;
+import com.ltd.mos.util.Const;
+import com.ltd.mos.util.Logic;
+
+/**
+ * Ñ°¾Æ
+ * 
+ * @author CaoT¡£
+ * 
+ */
+public class SearchWineActivity extends BaseActivity {
+	private ListView listView;
+	private ArrayList<SearchWineBean> list = new ArrayList<SearchWineBean>();
+	private SearchWineAdapter adapter;
+	private View view;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.search_wine);
+		listView = (ListView) this.findViewById(R.id.listView);
+		view = this.findViewById(R.id.view);
+		Logic.getInstance().initHeadView(view, "Ñ°¾Æ", true, "ÎÒÒªÑ°",
+				new HeadCallBack());
+		list = getList();
+		adapter = new SearchWineAdapter(list, this, new CallBack());
+		listView.setAdapter(adapter);
+		listView.setOnItemClickListener(new OnItemClickListener() {
+
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+	}
+
+	private ArrayList<SearchWineBean> getList() {
+		ArrayList<SearchWineBean> list = new ArrayList<SearchWineBean>();
+		for (int i = 0; i < 10; i++) {
+			SearchWineBean searchWineBean = new SearchWineBean();
+			if (i % 2 == 0) {
+				searchWineBean.setType("¡¾°×¾Æ¡¿");
+				searchWineBean.setSearchState(1);
+				searchWineBean.setIconState(1);
+			} else {
+				searchWineBean.setType("¡¾ÆÏÌÑ¾Æ¡¿");
+				searchWineBean.setSearchState(0);
+				searchWineBean.setIconState(0);
+			}
+			searchWineBean.setNum(i);
+			searchWineBean.setDesc("Å©±¾   ÊÀ²©¾Æ");
+			searchWineBean.setKey("¾Æ¾«¶È 52¶È");
+			list.add(searchWineBean);
+		}
+		return list;
+	}
+
+	class CallBack implements ECallBack {
+
+		public void OnCreate(Object obj) {
+			// TODO Auto-generated method stub
+			try {
+				int position = (Integer) obj;
+				if (list.get(position).getSearchState() == 1) {
+					list.get(position).setSearchState(0);
+					list.get(position).setNum(list.get(position).getNum() + 1);
+				} else {
+					list.get(position).setSearchState(1);
+					list.get(position).setNum(list.get(position).getNum() - 1);
+				}
+				adapter.notifyDataSetChanged();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		public void OnError(Object obj) {
+			// TODO Auto-generated method stub
+
+		}
+
+	}
+
+	class HeadCallBack implements ECallBack {
+
+		public void OnCreate(Object obj) {
+			// TODO Auto-generated method stub
+			String flag = Logic.getString(obj);
+			if (flag.equals(Const.LEFT)) {
+				SearchWineActivity.this.finish();
+			} else if (flag.equals(Const.RIGHT)) {
+				startActivity(new Intent(SearchWineActivity.this, MySearchActivity.class));
+			}
+		}
+
+		public void OnError(Object obj) {
+			// TODO Auto-generated method stub
+
+		}
+
+	}
+}

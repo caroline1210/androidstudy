@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_ll"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rectangle_shade"
+    android:orientation="horizontal" >
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_weight="1.0"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/consig_address1"
+            style="@style/size_16_gray003"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="北京市" />
+
+        <TextView
+            android:id="@+id/consig_address2"
+            style="@style/size_16_gray003"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="北京市北京市北京市北京市北京市北京市北京市北京市北京市北京市北京市北京市北京市" />
+
+        <TextView
+            android:id="@+id/consig_name"
+            style="@style/size_16_gray003"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="小花" />
+
+        <TextView
+            android:id="@+id/consig_phone"
+            style="@style/size_16_gray003"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:text="18888888888" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/pretermit"
+        android:layout_width="17dp"
+        android:layout_height="17dp"
+        android:src="@drawable/address_sec"
+        android:layout_gravity="bottom" />
+
+</LinearLayout>

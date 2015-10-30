@@ -1,0 +1,301 @@
+package com.ltd.mos.personal;
+
+import java.util.ArrayList;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.ltd.mos.R;
+import com.ltd.mos.base.BaseActivity;
+import com.ltd.mos.base.ECallBack;
+import com.ltd.mos.bean.Register;
+import com.ltd.mos.bean.TailorBean;
+import com.ltd.mos.db.SaveApplicationParam;
+import com.ltd.mos.erweima.ErweimaActivity;
+import com.ltd.mos.login.LoginActivity;
+import com.ltd.mos.sercenter.SearchWineActivity;
+import com.ltd.mos.util.Logic;
+
+//个人中心
+public class PersonAct extends BaseActivity implements OnClickListener {
+
+	// private static final String PersonAct = null;
+	private View view;
+	private TextView tv_name, tv_djq, tv_collect, tv_nologin;
+	private ImageView iv_message, iv_head;
+	private Button b_login;
+	private LinearLayout ll_djq, ll_PresentExp;
+	private ListView lv_order, lv_customize, lv_xj, lv_friends;
+	private String[] order = { "推送中", "待收货", "历史订单" };
+	private String[] customize = { "消息提醒", "我的收藏" };
+	private String[] xj = { "私人订制", "我的寻酒" };
+	private String[] friends = { "邀请好友" };
+	private int[] personList1 = { R.drawable.person_setting,
+			R.drawable.person_setting, R.drawable.person_setting };
+	private ArrayList<TailorBean> orderList = new ArrayList<TailorBean>();
+	private ArrayList<TailorBean> customizeList = new ArrayList<TailorBean>();
+	private ArrayList<TailorBean> xjList = new ArrayList<TailorBean>();
+	private ArrayList<TailorBean> friendList = new ArrayList<TailorBean>();
+	private PersonAdapter orderAdapter, customizeAdapter, xjAdapter,
+			friendAdapter;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.person_main);
+
+		initView();
+		// loginState();
+		view = findViewById(R.id.person_view);
+		/**
+		 * person主界面表的填充部分
+		 * 
+		 */
+		// 订单
+		orderList = getList(order, null, personList1);
+		orderAdapter = new PersonAdapter(this, orderList);
+		lv_order.setAdapter(orderAdapter);
+		// 私人订制
+		customizeList = getList(customize, null, personList1);
+		customizeAdapter = new PersonAdapter(this, customizeList);
+		lv_customize.setAdapter(customizeAdapter);
+		// 寻酒
+		xjList = getList(xj, null, personList1);
+		xjAdapter = new PersonAdapter(this, xjList);
+		lv_xj.setAdapter(xjAdapter);
+		// 邀请好友
+		friendList = getList(friends, null, personList1);
+		friendAdapter = new PersonAdapter(this, friendList);
+		lv_friends.setAdapter(friendAdapter);
+
+		registListener();
+		Logic logic = Logic.getInstance();
+		logic.showSet(view, true, true, new CallBack());// 调用logic的设置方法
+		logic.initHeadView(view, "个人中心", false, "", null);
+	}
+
+	/**
+	 * 返回键响应
+	 */
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			exitBy2Click(); // 调用双击退出函数
+		}
+		return true;
+	}
+
+	private void initView() {
+		// TODO Auto-generated method stub
+		lv_order = (ListView) findViewById(R.id.lv_person_order);
+		lv_customize = (ListView) findViewById(R.id.lv_person_customize);
+		lv_xj = (ListView) findViewById(R.id.lv_person_xj);
+		lv_friends = (ListView) findViewById(R.id.lv_person_friends);
+		
+		tv_name = (TextView) findViewById(R.id.tv_person_name);
+		Register register = SaveApplicationParam.getRegister(this);
+		tv_name.setText(register.getName());//获取设置用户名
+		
+		tv_djq = (TextView) findViewById(R.id.tv_person_djq_count);
+		tv_collect = (TextView) findViewById(R.id.tv_person_collect_count);
+		tv_nologin = (TextView) findViewById(R.id.tv_nologin);
+		b_login = (Button) findViewById(R.id.b_person_login);
+		iv_message = (ImageView) findViewById(R.id.iv_person_message);
+		iv_head = (ImageView) findViewById(R.id.iv_person_head);
+		ll_djq = (LinearLayout) findViewById(R.id.ll_person_djq);
+		ll_PresentExp = (LinearLayout) findViewById(R.id.ll_person_PresentExp);
+	}
+
+	private void registListener() {
+		// TODO Auto-generated method stub
+		tv_collect.setOnClickListener(this);
+		tv_djq.setOnClickListener(this);
+		tv_name.setOnClickListener(this);
+		b_login.setOnClickListener(this);
+		iv_message.setOnClickListener(this);
+		ll_djq.setOnClickListener(this);
+		ll_PresentExp.setOnClickListener(this);
+
+		// 订单各项
+		lv_order.setOnItemClickListener(new OnItemClickListener() {
+
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// TODO Auto-generated method stub
+				if (Logic.getLoginState(PersonAct.this)) {
+					switch (arg2) {
+					case 0:
+						startActivity(new Intent(PersonAct.this,
+								PushingAct.class));
+						break;
+					case 1:
+						startActivity(new Intent(PersonAct.this,
+								DGoodsAct.class));
+						break;
+					case 2:
+						startActivity(new Intent(PersonAct.this,
+								HistoryOrderAct.class));
+						break;
+					}
+				} else {
+					startActivity(new Intent(PersonAct.this,
+							LoginActivity.class));
+				}
+
+			}
+		});
+		// 消息和收藏
+		lv_customize.setOnItemClickListener(new OnItemClickListener() {
+
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// TODO Auto-generated method stub
+				if (Logic.getLoginState(PersonAct.this)) {
+					switch (arg2) {
+					case 0:
+						startActivity(new Intent(PersonAct.this,
+								MessageAct.class));
+						break;
+					case 1:
+						startActivity(new Intent(PersonAct.this,
+								MyCollectionAct.class));
+						break;
+					}
+				} else {
+					startActivity(new Intent(PersonAct.this,
+							LoginActivity.class));
+				}
+
+			}
+		});
+		// 寻酒和定制
+		lv_xj.setOnItemClickListener(new OnItemClickListener() {
+
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// TODO Auto-generated method stub
+				if (Logic.getLoginState(PersonAct.this)) {
+					switch (arg2) {
+					case 0:
+						startActivity(new Intent(PersonAct.this,
+								CustomizeAct.class));
+						break;
+					case 1:
+						startActivity(new Intent(PersonAct.this,
+								SearchWineActivity.class));
+						break;
+					}
+				} else {
+					startActivity(new Intent(PersonAct.this,
+							LoginActivity.class));
+				}
+			}
+		});
+		// 邀请好友
+		lv_friends.setOnItemClickListener(new OnItemClickListener() {
+
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+				// TODO Auto-generated method stub
+				switch (arg2) {
+				case 0:
+					startActivity(new Intent(PersonAct.this,
+							ErweimaActivity.class));
+					break;
+				}
+			}
+		});
+	}
+
+	class CallBack implements ECallBack {
+
+		public void OnCreate(Object obj) {
+			// TODO Auto-generated method stub
+			Intent setIntent = new Intent(PersonAct.this, SettingAct.class);
+			startActivity(setIntent);
+		}
+
+		public void OnError(Object obj) {
+		}
+
+	}
+
+	/**
+	 * 生成数据
+	 * 
+	 */
+	private ArrayList<TailorBean> getList(String[] content, String[] count,
+			int[] resource) {
+		ArrayList<TailorBean> list = new ArrayList<TailorBean>();
+		for (int i = 0; i < content.length; i++) {
+			TailorBean tailorInfo = new TailorBean();
+			tailorInfo.setContent(content[i]);
+			if (count != null) {
+				tailorInfo.setTitle(count[i]);
+			}
+			if (resource != null) {
+				tailorInfo.setResource(resource[i]);
+			}
+			list.add(tailorInfo);
+		}
+		return list;
+	}
+
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		if (Logic.getLoginState(PersonAct.this)) {
+			switch (v.getId()) {
+			case R.id.ll_person_djq:
+				startActivity(new Intent(PersonAct.this, DaijinquanAct.class));
+				break;
+			case R.id.ll_person_PresentExp:
+				Toast.makeText(PersonAct.this, "正在建设中", Toast.LENGTH_SHORT)
+						.show();
+				break;
+			case R.id.b_person_login:
+				startActivity(new Intent(PersonAct.this, LoginActivity.class));
+				break;
+			case R.id.iv_person_message:
+				startActivity(new Intent(PersonAct.this, MessageAct.class));
+				break;
+			}
+		} else {
+			startActivity(new Intent(PersonAct.this, LoginActivity.class));
+		}
+
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+
+		if (Logic.getLoginState(PersonAct.this)) {
+			b_login.setVisibility(View.GONE);
+			tv_nologin.setVisibility(View.GONE);
+			tv_name.setVisibility(View.VISIBLE);
+			iv_message.setVisibility(View.VISIBLE);
+			iv_head.setVisibility(View.VISIBLE);
+		} else {
+			b_login.setVisibility(View.VISIBLE);
+			tv_nologin.setVisibility(View.VISIBLE);
+			tv_name.setVisibility(View.GONE);
+			iv_message.setVisibility(View.GONE);
+			iv_head.setVisibility(View.GONE);
+		}
+
+	}
+}

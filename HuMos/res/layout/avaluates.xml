@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/view"
+        layout="@layout/head_layout1" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray005"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/avaluate_title"
+            style="@style/size_18_gray006"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:text="西班牙原瓶进口莫斯卡托起泡酒+香槟750ml" />
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" >
+
+            <TextView
+                style="@style/size_14_gray003"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="综合评分：" />
+
+            <ImageView
+                android:id="@+id/synthesize_score"
+                android:layout_width="110dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="3dp"
+                android:src="@drawable/star_4" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View style="@style/line" />
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <ListView
+            android:id="@+id/avaluate_listview"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@color/white"
+            android:divider="@color/gray004"
+            android:dividerHeight="1dp"
+            android:listSelector="@color/transparent" >
+        </ListView>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+    </FrameLayout>
+
+</LinearLayout>

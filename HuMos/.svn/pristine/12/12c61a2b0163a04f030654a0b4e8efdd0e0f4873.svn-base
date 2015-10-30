@@ -1,0 +1,84 @@
+package com.ltd.mos.personal;
+
+import java.util.ArrayList;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.ltd.mos.R;
+import com.ltd.mos.base.BaseActivity;
+import com.ltd.mos.base.ECallBack;
+import com.ltd.mos.bean.MessageBean;
+import com.ltd.mos.sercenter.MySearchActivity;
+import com.ltd.mos.sercenter.SearchWineActivity;
+import com.ltd.mos.util.Const;
+import com.ltd.mos.util.Logic;
+
+public class MessageAct extends BaseActivity {
+
+	private View view;
+	// private RelativeLayout rl_back;
+	// private TextView tv_clear;
+	private ListView listView;
+	private MessageAdapter adapter;
+	private ArrayList<MessageBean> list = new ArrayList<MessageBean>();
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.message);
+
+		for (int i = 0; i < 5; i++) {
+			MessageBean info = new MessageBean();
+			info.setContent("您还有几个订单没有完成，您希望现在去立即完成这些订单吗？" + i);
+			list.add(info);
+		}
+		adapter = new MessageAdapter(this, list);
+		listView = (ListView) findViewById(R.id.lv_message);
+		listView.setAdapter(adapter);
+
+		view = findViewById(R.id.message_view);
+
+		Logic logic = Logic.getInstance();
+		logic.showSet(view, false, true, new CallBack());
+		logic.initHeadView(view, "消息", true, "清空", new CallBack());
+
+		// tv_clear=(TextView) findViewById(R.id.empty);
+		// list.clear();
+		// tv_clear.setOnClickListener(new OnClickListener() {
+		//
+		// public void onClick(View v) {
+		// // TODO Auto-generated method stub
+		// list.clear();
+		// }
+		// });
+	}
+
+	class CallBack implements ECallBack {
+
+		public void OnCreate(Object obj) {
+			// TODO Auto-generated method stub
+			if (obj.equals(Const.LEFT)) {
+				// 返回上一级界面
+				finish();
+			} else if (obj.equals(Const.RIGHT)) {
+				// 清空
+				list.clear();
+				adapter.notifyDataSetChanged();
+				// startActivity(new Intent(MessageAct.this,
+				// MySearchActivity.class));
+			}
+		}
+
+		public void OnError(Object obj) {
+			// TODO Auto-generated method stub
+
+		}
+	}
+}

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black_1"
+    android:orientation="vertical" >
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.0"
+        android:scrollbars="none" >
+
+        <com.ltd.mos.main.MyListView
+            android:id="@+id/pop_listview"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:cacheColorHint="#00000000"
+            android:divider="#595959"
+            android:dividerHeight="0.5dp"
+            android:listSelector="@color/transparent"
+            android:scrollbars="none" >
+        </com.ltd.mos.main.MyListView>
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/cancel"
+            style="@style/size_14_white"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:background="@color/gray010"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:text="取消" />
+
+        <Button
+            android:id="@+id/confirm"
+            style="@style/size_14_white"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="35dp"
+            android:background="@color/gray010"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:text="确定" />
+    </LinearLayout>
+
+</LinearLayout>

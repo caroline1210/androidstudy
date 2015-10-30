@@ -1,0 +1,200 @@
+package com.ltd.mos.util;
+
+public class Const {
+
+	public static final String WX_APP_ID = "wxc175d185d0b8c350";// AppID
+																// //wxc175d185d0b8c350
+	public static final String USERINFO = "USERINFO";// sharedpreference 文件名
+														// 保存用户的一些信息
+	/************* 用户信息 **************/
+	public static final String USERNAME = "USERNAME";// 用户名
+	public static final String PHONENUMBER = "PHONENUMBER";// 用户手机号码
+	public static final String PASSWORD = "PASSWORD";// 用户密码
+	public static final String LANDSTATE = "LANDSTATE";// 登陆状态
+	public static final String INGUIDE = "INGUIDE";// 是否进入过向导界面
+
+	public static final String FLAG_WINE = "FLAG_WINE";
+
+	public static final String FLAG_BAIJIU = "FLAG_BAIJIU";
+	public static final String FLAG_PUTAOJIU = "FLAG_PUTAOJIU";
+	public static final String FLAG_PIJIU = "FLAG_PIJIU";
+	public static final String FLAG_LAOJIU = "FLAG_LAOJIU";
+
+	public static final String WINEINFO = "WINEINFO";
+
+	public static final String WXFRIEND = "WXFRIEND";// 分享到微信好友
+	public static final String WXCIRCLE = "WXCIRCLE";// 分享到微信朋友圈
+
+	public static final String LEFT = "LEFT";
+	public static final String RIGHT = "RIGHT";
+	public static final String CLEAR = "CLEAR";
+	public static final String SET = "SET";
+	public static final String SHARE = "SHARE";// 分享
+	public static final String COLLECT = "COLLECT";// 收藏
+	public static final int PICTURE_WIDE = 450;
+	public static final int PICTURE_HEIGHT = 200;
+	public static final int WINEGAMEWIDE = 411;
+	public static final int WINEGAMEHEIGHT = 262;
+	public static final int BASINWIDE = 281;
+	public static final int BASINHEIGHT = 253;
+	public static final String ADD = "ADD";
+	public static final String REDUCE = "REDUCE";
+	public static final String HOTSELL = "HOTSELL";// 热销
+	public static final String PRICE = "PRICE";// 价格
+	public static final String NEWPRODUCT = "NEWPRODUCT";// 新品
+
+	public static final String PERSONAL = "PERSONAL";// 个人信息 sp名称
+	public static final String MSGSEND = "MSGSEND";// 消息推送 sp的key
+
+	public static final String VOICEREMIND = "VOICEREMIND";// 声音提醒设置
+	public static final String NOPAINT = "NOPAINT";// 2G/3G模式下无图模式
+
+	/************* 数据库表名 **************/
+	public static final String SEARCHHISTORY = "search_history";// 搜索历史
+	public static final String TABLE_SHOPCAR = "shopcar";// 购物车表
+
+	/*********************** 葡萄酒 筛选 **********************/
+	public static final String[] TITLE = { "国家", "产区", "等级", "酒体颜色", "含糖量",
+			"品牌", "葡萄品种", "价格", "适用场合", "其它" };
+	public static final String[] NATION = { "全部国家", "法国", "德国", "西班牙", "意大利",
+			"摩尔多瓦", "葡萄牙", "奥地利", "匈牙利", "黑山", "加拿大", "南非", "智利", "澳大利亚", "美国",
+			"新西兰", "瑞士", "阿根廷", "比利时", "波兰", "中国" };
+	public static final String[] PRODUCINGAREA = { "全部产区", "波尔多", "勃艮第",
+			"阿尔萨斯", "罗纳河谷", "普罗旺斯", "卢瓦尔河谷", "香槟区", "朗格多克", "摩塞尔", "莱茵高" };
+	public static final String[] GRADE = { "全部等级", "法国AOP", "法国AOC", "法国IGP",
+			"法国VDF", "德国QMP", "德国QBA", "德国Langwein", "德国Tafelwein", "西班牙DOC",
+			"西班牙DO", "西班牙VDLT", "西班牙VC", "西班牙VDM" };
+	public static final String[] WINECOLOR = { "默认颜色", "红葡萄酒", "桃红葡萄酒", "白葡萄酒" };
+	public static final String[] SUGARDEGREE = { "默认含糖量", "干型葡萄酒", "半干型葡萄酒",
+			"半甜型葡萄酒", "甜型葡萄酒 " };
+	// 品牌
+	public static final String[] BRAND = { "全部品牌", "拉菲", "拉图", "玛歌", "红颜容",
+			"木桐", "白马", "欧颂", "柏翠", "卡斯特", "金钟城堡", "佳雅", "杰卡斯", "红魔鬼", "奔富",
+			"作品一号", "澜爵", "明悦", "卡兹", "汉凯", "张裕", "王朝", "长城" };
+	// 品种
+	public static final String[] VARIETY = { "全部品种", "赤霞珠", "美乐", "霞多丽", "西拉",
+			"品丽珠", "歌海娜", "泰普尼罗", "长相思", "琼瑶浆", "黑皮诺", "灰皮诺", "内比奥罗", "佳美",
+			"马尔贝克", "雷司令", "小维度", "仙粉黛", "佳美娜" };
+
+	public static final String[] WINEPRICE = { "全部价格", "1-49元", "50-99元",
+			"100-199元", "200-299元", "300-499元", "500-799元", "800-999元",
+			"1000-2000元", "2000元以上" };
+	public static final String[] OCCASION = { "全部场合", "商务用酒", "婚庆用酒", "聚会用酒",
+			"礼节拜访", "自己饮用" };
+	public static final String[] OTHER = { "默认", "绝干起泡酒", "干型起泡酒", "半干起泡酒",
+			"甜型起泡酒", "绝干香槟", "干型香槟", "半干香槟", "甜酒", "雪利酒", "波特酒" };
+
+	/**************** 白酒 ******************/
+	public static final String[] BAIJIU_TITLE = { "品牌", "香型", "产地", "价格",
+			"酒精度", "适用场合" };
+	public static final String[] BAIJIU_BRAND = { "全部品牌", "茅台", "五粮液", "泸州老窖",
+			"国窖1573", "汾酒", "剑南春", "洋河", "水井坊", "古井贡", "西凤", "郎酒", "金六福",
+			"酒鬼酒", "国台", "董酒", "牛栏山" };
+	public static final String[] BAIJIU_XIANGXIN = { "全部香型", "酱香", "浓香", "清香",
+			"馥郁香型", "兼香", "董香", "凤香", "芝麻香型", "米香型", "復合香", "杞香型", "老白干香型",
+			"特香型", "鼓香型", "荞香型" };
+	public static final String[] BAIJIU_PRODUCINGAREA = { "全部产地", "贵州", "四川",
+			"山西", "北京", "江苏", "安徽", "湖北", "江西", "山东", "河南", "河北", "湖南", "新疆",
+			"台湾", "内蒙", "辽宁", "陕西", "福建", "重庆", "吉林", "云南", "甘肃", "西藏", "黑龙江",
+			"宁夏", "广西", "广东", "天津" };
+	public static final String[] BAIJIU_PRICE = { "全部价格", "1-99", "100-299",
+			"300-599", "600-999", "1000-1999", "2000元以上" };
+	public static final String[] BAIJIU_JIUJING = { "全部度数", "35°以下", "35°-39°",
+			"40°-49°", "50°以上" };
+	public static final String[] BAIJIU_OCCASION = { "全部场合", "商务用酒", "婚庆用酒",
+			"聚会用酒", "礼节拜访" };
+
+	/**************** 啤酒 ******************/
+	public static final String[] PIJIU_TITLE = { "品牌", "国家", "价格", "适用场合" };
+	public static final String[] PIJIU_BRAND = { "全部品牌", "凯撒", "喜力", "凯狮",
+			"雪顶乡村", "阿登堡", "德福堡", "哈尔博", "弗伦斯堡", "雪花", "燕京", "百威", "嘉士伯", "青岛",
+			"海特", "西藏青稞", "库斯特 " };
+	public static final String[] PIJIU_NATION = { "全部国家", "捷克", "俄罗斯", "韩国",
+			"德国", "美国", "英国", "波兰", "中国" };
+	public static final String[] PIJIU_PRICE = { "全部价格", "1-49元", "50-99元",
+			"100-199元", "200-299元", "300-499元", "500元以上" };
+	public static final String[] PIJIU_OCCASION = { "全部场合", "聚会用酒", "礼节拜访",
+			"自己饮用" };
+
+	/**************** 老酒 ******************/
+	public static final String[] LAOJIU_TITLE = { "品牌", "年代", "产地", "价格",
+			"适用场合" };
+	public static final String[] LAOJIU_BRAND = { "全部品牌", "茅台", "五粮液", "泸州老窖",
+			"剑南春", "汾酒", "沱牌舍得", "西凤", "古井" };
+	public static final String[] LAOJIU_NIANDAI = { "全部年代", "50年代", "60年代",
+			"70年代", "80年代", "90年代", "90年代以后" };
+	public static final String[] LAOJIU_PRODUCINGAREA = { "全部产地", "贵州", "四川",
+			"山西", "陕西", "江苏", "安徽", "山东", "宁夏", "重庆", "河南", "吉林", "湖南", "黑龙江",
+			"台湾", "内蒙", "辽宁 " };
+	public static final String[] LAOJIU_PRICE = { "全部价格", "300-599", "600-999",
+			"1000-1999", "2000-3999", "4000以上" };
+	public static final String[] LAOJIU_OCCASION = { "全部场合", "商务用酒", "礼节拜访" };
+
+	public static final String WHITE_SPIRIT = "WHITE_SPIRIT";// 白酒
+	public static final String GRAPE_WINE = "GRAPE_WINE";// 葡萄酒
+	public static final String BEER = "BEER";// 啤酒
+	public static final String OLD_WINE = "OLD_WINE";// 老酒
+	public static final String SURROUNDING = "SURROUNDING";// 周边
+	public static final String ALL = "ALL";// 全部
+	public static final String WINE_RED = "WINE_RED";// 红酒
+	public static final int TAKEPHOTO = 0;
+	public static final int PICTURE = 1;
+	public static final int CANCLE = 2;
+	/** 接口CODE */
+	/**
+	 * 获取验证码
+	 */
+	public static final int GETVERIFYCODE = 1001;
+	/**
+	 * 注册
+	 */
+	public static final int REGISTER = 1002;
+	/**
+	 * 登陆
+	 */
+	public static final int LOGIN = 1003;
+	/**
+	 * 重置密码
+	 */
+	public static final int RESETPASSWORD = 1004;
+
+	/**
+	 * 验证密码
+	 */
+	public static final int VERIFYCODE = 1005;
+
+	/**
+	 * 更改密码
+	 */
+	public static final int CHANGEPASSWORD = 1006;
+	/**
+	 * 获取用户信息
+	 */
+	public static final int GETUSERINFO = 1007;
+	/**
+	 * 修改用户名
+	 */
+	public static final int CHANGEUSERNAME = 3001;
+	/**
+	 * 修改用户密码
+	 */
+	public static final String BARCODE = "3760091222060";
+	public static final int CHANGEPWD = 3002;
+	public static final int PERSONORDER = 3003;//获取个人中心订单信息
+	public static final int CONFIRMERWEIMA = 3004;//二维码扫描订单
+	public static final int IMMEDIATECONFIRME = 3005;//手动立即验证
+	public static final int GETCATEGORYFEATURES = 2004;// 获取酒品分类特征
+	public static final int FINDPRODUCT = 2005;// 查询检索酒品全部信息
+	public static final int ADDSHOPPINGLISTITEM = 2006;// 添加商品到购物车
+	public static final int LISTSHOPPINGLISTITEM = 2007;// 获取购物车酒品列表
+	public static final int FINDSINGLEPRODUCT = 2008;// 查询检索单个酒品全部信息
+	public static final int CLEARSHOPPINGLISTITEM = 2009;// 清空购物车商品
+	public static final int SETSHOPPINGLISTADDRESS = 2010;// 设置购物车地址
+	public static final int SUBMITSHOPPINGLIST = 2011;// 提交订单
+	public static final int CREATESHIPPINGADDRESS = 2012;// 新增收货地址
+	public static final int LISTSHIPPINGADDRESS = 2013;// 获取收货地址
+	public static final int GETGEOCHILDREN = 2014;// 获取省/市/区列表
+	public static final int UPDATESHIPPINGADDRESS = 2015;// 修改收货地址
+	public static final int DELETESHIPPINGADDRESS = 2016;// 删除收货地址
+	public static final int DELETESHOPPINGLISTITEM = 2017;// 删除购物车商品
+}

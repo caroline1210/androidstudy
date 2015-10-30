@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/white"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/view"
+        layout="@layout/head_layout" />
+
+
+    <TextView
+        style="@style/size_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:gravity="left|center_vertical"
+        android:text="请输入密码：" />
+
+    <EditText
+        android:id="@+id/password"
+        style="@style/size_16"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/edit_bg"
+        android:hint="请输入你的密码"
+        android:password="true"
+        android:paddingLeft="5dp" />
+
+    <Button
+        android:id="@+id/register"
+        style="@style/size_18_white"
+        android:layout_width="110dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/reg_btn"
+        android:text="提交" />
+
+</LinearLayout>

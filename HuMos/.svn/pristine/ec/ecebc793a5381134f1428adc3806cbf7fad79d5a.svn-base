@@ -1,0 +1,45 @@
+package com.ltd.mos.bean;
+
+public class TailorBean {
+	String content;
+	String contentHint;
+	String title;
+	int resource;
+	
+	String tailorAdrress;
+	String tailorPrice;
+	String tailorNum;
+	
+	public int getResource() {
+		return resource;
+	}
+
+	public void setResource(int resource) {
+		this.resource = resource;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getContentHint() {
+		return contentHint;
+	}
+
+	public void setContentHint(String contentHint) {
+		this.contentHint = contentHint;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+}

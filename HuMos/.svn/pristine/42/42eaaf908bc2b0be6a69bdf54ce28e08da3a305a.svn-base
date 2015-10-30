@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="45dp"
+    android:background="#FFFFFF"
+    android:descendantFocusability="blocksDescendants"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:id="@+id/tv_setting_content"
+        style="@style/size_14"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:gravity="center_vertical|left"
+        android:paddingBottom="5dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="5dp" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:layout_weight="1"
+        android:gravity="right|center_vertical"
+        android:paddingLeft="5dp"
+        android:paddingRight="10dp" >
+
+        <TextView
+            android:id="@+id/tv_setting_title"
+            style="@style/size_14"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginRight="5dp"
+            android:gravity="center_vertical|right" />
+
+        <Button
+            android:id="@+id/iv_setting_resource"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@null" />
+    </LinearLayout>
+
+</LinearLayout>

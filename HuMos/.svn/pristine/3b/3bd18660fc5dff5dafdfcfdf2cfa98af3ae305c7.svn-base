@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="25dp"
+    android:background="@drawable/rectangle_shade"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/tv_findwine_status"
+        style="@style/size_14"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="@string/Workmanship" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" >
+
+        <TextView
+            android:id="@+id/tv_findwine_winedese"
+            style="@style/size_12_gray007"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/Workmanship" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/person_setting" />
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/paint" />
+    <TextView 
+        android:id="@+id/tv_findwine_time"
+        style="@style/size_12_gray007"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/Workmanship"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp" 
+        android:layout_marginBottom="10dp"/>
+
+</LinearLayout>

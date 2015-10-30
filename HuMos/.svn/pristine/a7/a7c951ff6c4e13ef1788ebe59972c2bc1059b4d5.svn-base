@@ -1,0 +1,207 @@
+package com.ltd.mos.main;
+
+import java.util.ArrayList;
+
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
+import android.widget.EditText;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.ltd.mos.R;
+import com.ltd.mos.base.BaseActivity;
+import com.ltd.mos.bean.SearchBean;
+import com.ltd.mos.bean.WineInfo;
+import com.ltd.mos.util.Logic;
+
+public class WineSearchActivity extends BaseActivity implements OnClickListener {
+
+	private LinearLayout title_return, history_ll;
+	private EditText search_edit;
+	private ImageView search_delete;
+	private ArrayList<SearchBean> searchHistory;
+	private GridView history_grid;
+	private TextView title_search, search_num;
+	private ListView listview;
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		// TODO Auto-generated method stub
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.winesearch);
+
+		findViewById();
+
+		Logic logic = Logic.getInstance();
+
+		searchHistory = logic.getSearchHistory(this);
+
+		history_grid.setAdapter(new GridAdapter());
+
+		history_grid.setOnItemClickListener(new GridItemClick());
+	}
+
+	private void findViewById() {
+		title_return = (LinearLayout) findViewById(R.id.title_return);
+		search_delete = (ImageView) findViewById(R.id.search_delete);
+		title_search = (TextView) findViewById(R.id.title_search);
+		search_edit = (EditText) findViewById(R.id.search_edit);
+		history_ll = (LinearLayout) findViewById(R.id.history_ll);
+		history_grid = (GridView) findViewById(R.id.history_grid);
+		listview = (ListView) findViewById(R.id.winesearch_list);
+		search_num = (TextView) findViewById(R.id.search_num);
+		// // 获取焦点，默认显示键盘
+		// search_edit.setFocusable(true);
+		// search_edit.requestFocus();
+		// InputMethodManager imm = (InputMethodManager)
+		// search_edit.getContext()
+		// .getSystemService(Context.INPUT_METHOD_SERVICE);
+		// imm.toggleSoftInput(0, InputMethodManager.SHOW_FORCED);
+
+		title_return.setOnClickListener(this);
+		search_delete.setOnClickListener(this);
+		title_search.setOnClickListener(this);
+		search_edit.addTextChangedListener(new EditTextWatcher());
+	}
+
+	class GridAdapter extends BaseAdapter {
+
+		public int getCount() {
+			// TODO Auto-generated method stub
+			return searchHistory.size();
+		}
+
+		public Object getItem(int position) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		public long getItemId(int position) {
+			// TODO Auto-generated method stub
+			return 0;
+		}
+
+		public View getView(int position, View convertView, ViewGroup parent) {
+			ViewHolder holder;
+			if (convertView == null) {
+				convertView = LinearLayout.inflate(WineSearchActivity.this,
+						R.layout.searchhistory_item, null);
+				holder = new ViewHolder();
+				holder.history_text = (TextView) convertView
+						.findViewById(R.id.history_item_text);
+				convertView.setTag(holder);
+			} else {
+				holder = (ViewHolder) convertView.getTag();
+			}
+			SearchBean searchBean = searchHistory.get(position);
+			holder.history_text.setText(searchBean.getName());
+
+			return convertView;
+		}
+
+		class ViewHolder {
+			TextView history_text;
+
+		}
+	}
+
+	class GridItemClick implements OnItemClickListener {
+
+		public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+				long arg3) {
+			SearchBean searchBean = searchHistory.get(position);
+			search_edit.setText(searchBean.getName());
+			search_edit.setSelection(search_edit.getText().length());
+			// history_ll.setVisibility(View.GONE);
+		}
+
+	}
+
+	class EditTextWatcher implements TextWatcher {
+
+		private CharSequence temp;
+
+		public void afterTextChanged(Editable s) {
+
+			if (temp.toString().trim().length() > 0) {
+				search_delete.setVisibility(View.VISIBLE);
+			} else {
+				search_delete.setVisibility(View.GONE);
+			}
+
+		}
+
+		public void beforeTextChanged(CharSequence s, int start, int count,
+				int after) {
+
+		}
+
+		public void onTextChanged(CharSequence s, int start, int before,
+				int count) {
+			temp = s;
+
+		}
+
+	}
+
+	private ArrayList<WineInfo> wineList;
+
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.title_return:
+
+			this.finish();
+
+			break;
+		case R.id.title_search:
+			String text = Logic.getString(search_edit.getText()).trim();
+			if (text.length() == 0) {
+				search_edit.setText(search_edit.getHint());
+				search_edit.setSelection(search_edit.getText().length());
+			}
+
+			wineList = new ArrayList<WineInfo>();
+			for (int i = 0; i < 9; i++) {
+				WineInfo info = new WineInfo();
+				info.setWineDese("洋河 蓝色经典海之蓝 480ml");
+				info.setLocation("7.0km");
+				if (i == 3)
+					info.setDrop(true);
+				if (i == 5) {
+					info.setStraw(true);
+					info.setDrop(true);
+				}
+				if (i == 6) {
+					info.setPresent(true);
+					info.setStraw(true);
+					info.setDrop(true);
+				}
+				info.setWinePrice("126");
+				info.setWineevent("赠小酒");
+				info.setMarketPrice("223");
+				wineList.add(info);
+			}
+			listview.setAdapter(new GrapeListAdapter(WineSearchActivity.this,
+					wineList));
+			search_num.setText(wineList.size() + "");
+			history_ll.setVisibility(View.GONE);
+			break;
+		case R.id.search_delete:
+			search_edit.setText("");
+			break;
+		default:
+			break;
+		}
+
+	}
+}

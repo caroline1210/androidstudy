@@ -1,0 +1,145 @@
+package com.ltd.mos.bean;
+
+import java.util.ArrayList;
+
+public class TailorBean {
+	String content;
+	String contentHint;
+	String title;
+	int resource;
+	
+	String tailorAdrress;
+	String tailorPrice;
+	String tailorNum;
+	String tailorTime;
+	String tailorDesc;
+	String tailorPhone;
+	String tailorName;
+	String tailorEmail;
+	String tailorPath;
+	String tailorRemark;
+	ArrayList<String> images;
+	
+	
+	
+	public ArrayList<String> getImages() {
+		return images;
+	}
+
+	public void setImages(ArrayList<String> images) {
+		this.images = images;
+	}
+
+	public String getTailorAdrress() {
+		return tailorAdrress;
+	}
+
+	public void setTailorAdrress(String tailorAdrress) {
+		this.tailorAdrress = tailorAdrress;
+	}
+
+	public String getTailorPrice() {
+		return tailorPrice;
+	}
+
+	public void setTailorPrice(String tailorPrice) {
+		this.tailorPrice = tailorPrice;
+	}
+
+	public String getTailorNum() {
+		return tailorNum;
+	}
+
+	public void setTailorNum(String tailorNum) {
+		this.tailorNum = tailorNum;
+	}
+
+	public String getTailorTime() {
+		return tailorTime;
+	}
+
+	public void setTailorTime(String tailorTime) {
+		this.tailorTime = tailorTime;
+	}
+
+	public String getTailorDesc() {
+		return tailorDesc;
+	}
+
+	public void setTailorDesc(String tailorDesc) {
+		this.tailorDesc = tailorDesc;
+	}
+
+	public String getTailorPhone() {
+		return tailorPhone;
+	}
+
+	public void setTailorPhone(String tailorPhone) {
+		this.tailorPhone = tailorPhone;
+	}
+
+	public String getTailorName() {
+		return tailorName;
+	}
+
+	public void setTailorName(String tailorName) {
+		this.tailorName = tailorName;
+	}
+
+	public String getTailorEmail() {
+		return tailorEmail;
+	}
+
+	public void setTailorEmail(String tailorEmail) {
+		this.tailorEmail = tailorEmail;
+	}
+
+	public String getTailorPath() {
+		return tailorPath;
+	}
+
+	public void setTailorPath(String tailorPath) {
+		this.tailorPath = tailorPath;
+	}
+
+	public String getTailorRemark() {
+		return tailorRemark;
+	}
+
+	public void setTailorRemark(String tailorRemark) {
+		this.tailorRemark = tailorRemark;
+	}
+
+	public int getResource() {
+		return resource;
+	}
+
+	public void setResource(int resource) {
+		this.resource = resource;
+	}
+
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	public String getContentHint() {
+		return contentHint;
+	}
+
+	public void setContentHint(String contentHint) {
+		this.contentHint = contentHint;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+}
